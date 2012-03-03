@@ -1,0 +1,1 @@
+require 'heroku/command/repo'
