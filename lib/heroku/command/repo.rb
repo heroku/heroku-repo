@@ -7,6 +7,24 @@ end
 
 # Slug manipulation
 class Heroku::Command::Repo < Heroku::Command::BaseWithApp
+
+  # repo:purge_cache
+  #
+  # Deletes the contents the build cache in the repository
+  #
+  def purge_cache
+    run <<EOF
+mkdir -p repo_tmp/unpack
+cd repo_tmp
+curl -o repo.tgz '#{repo_get_url}'
+cd unpack
+tar -zxf ../repo.tgz
+rm -rf .cache/*
+tar -zcf ../repack.tgz .
+curl --upload-file ../repack.tgz '#{repo_put_url}'
+exit
+EOF
+  end
   
   # repo:gc
   #
