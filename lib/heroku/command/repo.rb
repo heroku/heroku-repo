@@ -14,6 +14,7 @@ class Heroku::Command::Repo < Heroku::Command::BaseWithApp
   #
   def purge_cache
     run <<EOF
+set -e
 mkdir -p repo_tmp/unpack
 cd repo_tmp
 curl -o repo.tgz '#{repo_get_url}'
@@ -32,6 +33,7 @@ EOF
   #
   def gc
     run <<EOF
+set -e
 mkdir -p repo_tmp/unpack
 cd repo_tmp
 curl -o repo.tgz '#{repo_get_url}'
