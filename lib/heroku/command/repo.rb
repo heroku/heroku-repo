@@ -54,6 +54,21 @@ EOF
     system("curl -o #{app}-repo.tgz '#{repo_get_url}'")
   end
 
+  # repo:reset
+  #
+  # Reset the repo and cache
+  def reset
+    run <<EOF
+set -e
+mkdir -p repo_tmp/unpack
+cd repo_tmp/unpack
+git init --bare .
+tar -zcf ../repack.tgz .
+curl -o /dev/null --upload-file ../repack.tgz '#{repo_put_url}'
+exit
+EOF
+  end
+
   private
 
   def release
