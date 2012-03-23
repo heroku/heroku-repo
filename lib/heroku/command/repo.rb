@@ -22,7 +22,7 @@ cd unpack
 tar -zxf ../repo.tgz
 rm -rf .cache/*
 tar -zcf ../repack.tgz .
-curl --upload-file ../repack.tgz '#{repo_put_url}'
+curl -o /dev/null --upload-file ../repack.tgz '#{repo_put_url}'
 exit
 EOF
   end
@@ -41,7 +41,7 @@ cd unpack
 tar -zxf ../repo.tgz
 git gc --aggressive
 tar -zcf ../repack.tgz .
-curl --upload-file ../repack.tgz '#{repo_put_url}'
+curl -o /dev/null --upload-file ../repack.tgz '#{repo_put_url}'
 exit
 EOF
   end
