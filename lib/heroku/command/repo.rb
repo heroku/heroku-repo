@@ -26,6 +26,21 @@ curl --upload-file ../repack.tgz '#{repo_put_url}'
 exit
 EOF
   end
+  
+  # repo:explore
+  #
+  # Unpacks the repo for exploration
+  #
+  def explore
+    run <<EOF
+set -e
+mkdir -p tmp/repo_tmp/unpack
+cd tmp/repo_tmp
+curl -o repo.tgz '#{repo_get_url}'
+cd unpack
+tar -zxf ../repo.tgz
+EOF
+  end
 
   # repo:gc
   #
