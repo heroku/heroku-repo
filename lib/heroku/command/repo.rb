@@ -15,8 +15,8 @@ class Heroku::Command::Repo < Heroku::Command::BaseWithApp
   def purge_cache
     run <<EOF
 set -e
-mkdir -p repo_tmp/unpack
-cd repo_tmp
+mkdir -p /tmp/repo_tmp/unpack
+cd /tmp/repo_tmp
 curl -o repo.tgz '#{repo_get_url}'
 cd unpack
 tar -zxf ../repo.tgz
@@ -34,9 +34,9 @@ EOF
   def gc
     run <<EOF
 set -e
-mkdir -p repo_tmp/unpack
-cd repo_tmp
-curl -o repo.tgz '#{repo_get_url}'
+mkdir -p /tmp/repo_tmp/unpack
+cd /tmp/repo_tmp
+curl -vi -o repo.tgz '#{repo_get_url}'
 cd unpack
 tar -zxf ../repo.tgz
 git gc --aggressive
@@ -60,8 +60,8 @@ EOF
   def reset
     run <<EOF
 set -e
-mkdir -p repo_tmp/unpack
-cd repo_tmp/unpack
+mkdir -p /tmp/repo_tmp/unpack
+cd /tmp/repo_tmp/unpack
 git init --bare .
 tar -zcf ../repack.tgz .
 curl -o /dev/null --upload-file ../repack.tgz '#{repo_put_url}'
