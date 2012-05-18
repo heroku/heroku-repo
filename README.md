@@ -1,4 +1,4 @@
-# heroku repo plugin
+# Heroku Repo plugin
 
 This plugin adds some commands to the heroku gem to interact with the app's repo
 
@@ -27,3 +27,9 @@ This will run a `git gc --agressive` against the applications repo. This is done
     $ heroku repo:purge_cache -a appname
     
 This will delete the contents of the build cache stored in the repository. This is done inside a run process on the application.
+
+### rebuild
+
+    $ heroku repo:rebuild -a appname
+    
+This will empty the remote repository and push the repository up again, effectively triggering an app rebuild.
