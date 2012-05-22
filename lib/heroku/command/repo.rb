@@ -60,8 +60,8 @@ EOF
   def reset
     run <<EOF
 set -e
-mkdir -p repo_tmp/unpack
-cd repo_tmp/unpack
+mkdir -p tmp/repo_tmp/unpack
+cd tmp/repo_tmp/unpack
 git init --bare .
 tar -zcf ../repack.tgz .
 curl -o /dev/null --upload-file ../repack.tgz '#{repo_put_url}'
