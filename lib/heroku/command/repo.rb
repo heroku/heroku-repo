@@ -1,9 +1,4 @@
-begin
-  require 'json'
-rescue LoadError
-  display "json gem is required for the Repo plugin"
-  exit(1)
-end
+require "vendor/heroku/okjson"
 
 # Slug manipulation
 class Heroku::Command::Repo < Heroku::Command::BaseWithApp
@@ -80,7 +75,7 @@ EOF
   private
 
   def release
-    @release ||= JSON.parse(heroku.get('/apps/' + app + '/releases/new'))
+    @release ||= Heroku::OkJson.decode(heroku.get('/apps/' + app + '/releases/new'))
   end
 
   def repo_get_url
