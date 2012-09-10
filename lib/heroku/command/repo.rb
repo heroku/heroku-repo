@@ -21,6 +21,7 @@ curl -o /dev/null --upload-file ../repack.tgz '#{repo_put_url}'
 exit
 EOF
   end
+  alias_command "repo:purge-cache", "repo:purge_cache"
 
   # repo:gc
   #
