@@ -3,7 +3,7 @@ require "vendor/heroku/okjson"
 # Slug manipulation
 class Heroku::Command::Repo < Heroku::Command::BaseWithApp
 
-  # repo:purge_cache
+  # repo:purge-cache
   #
   # Deletes the contents the build cache in the repository
   #
