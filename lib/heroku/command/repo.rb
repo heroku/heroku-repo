@@ -16,6 +16,7 @@ curl -o repo.tgz '#{repo_get_url}'
 cd unpack
 tar -zxf ../repo.tgz
 rm -rf .cache/*
+rm -rf .cache/.heroku
 tar -zcf ../repack.tgz .
 curl -o /dev/null --upload-file ../repack.tgz '#{repo_put_url}'
 exit
