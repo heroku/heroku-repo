@@ -50,6 +50,23 @@ EOF
     system("curl -o #{app}-repo.tgz '#{repo_get_url}'")
   end
 
+  # repo:clone
+  #
+  # Sets the bare repo for immediate consumption
+  def clone
+    if File.exist?(app)
+      puts "#{app} already exists in the filesystem; aborting."
+      return
+    end
+    FileUtils.mkdir_p("#{app}/.git")
+    Dir.chdir("#{app}/.git")
+    system("curl '#{repo_get_url}' | tar xzf -")
+    Dir.chdir("..")
+    system("git init")
+    system("git reset --hard master")
+    system("git remote add heroku git@heroku.com:#{app}.git")
+  end
+
   # repo:reset
   #
   # Reset the repo and cache
