@@ -10,7 +10,13 @@ To install:
 
 ## Commands
 
-### Download
+### clone
+
+    $ heroku repo:clone -a appname
+    
+This will clone the applications repo to your local filesystem. No collaboration necessary!
+
+### download
 
     $ heroku repo:download -a appname
     
