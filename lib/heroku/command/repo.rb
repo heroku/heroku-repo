@@ -15,8 +15,20 @@ cd tmp/repo_tmp
 curl -o repo.tgz '#{repo_get_url}'
 cd unpack
 tar -zxf ../repo.tgz
+METADATA=".cache/vendor/heroku"
+if [ -d "$METADATA" ]; then
+  TMPDIR=`mktemp -d`
+  cp -rf $METADATA $TMPDIR
+fi
 rm -rf .cache
 mkdir .cache
+TMPDATA="$TMPDIR/heroku"
+VENDOR=".cache/vendor"
+if [ -d "$TMPDATA" ]; then
+  mkdir $VENDOR
+  cp -rf $TMPDATA $VENDOR
+  rm -rf $TMPDIR
+fi
 tar -zcf ../repack.tgz .
 curl -o /dev/null --upload-file ../repack.tgz '#{repo_put_url}'
 exit
