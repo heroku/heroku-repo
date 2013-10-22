@@ -74,6 +74,10 @@ EOF
 
   private
 
+  def cache_delete_url
+    releases['cache_delete_url']
+  end
+
   def release
     @release ||= Heroku::OkJson.decode(heroku.get('/apps/' + app + '/releases/new'))
   end
