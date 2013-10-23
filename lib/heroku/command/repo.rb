@@ -18,6 +18,7 @@ tar -zxf ../repo.tgz
 rm -rf .cache/*
 tar -zcf ../repack.tgz .
 curl -o /dev/null --upload-file ../repack.tgz '#{repo_put_url}'
+curl --request DELETE '#{cache_delete_url}'
 exit
 EOF
   end
@@ -73,6 +74,10 @@ EOF
   end
 
   private
+
+  def cache_delete_url
+    releases['cache_delete_url']
+  end
 
   def release
     @release ||= Heroku::OkJson.decode(heroku.get('/apps/' + app + '/releases/new'))
