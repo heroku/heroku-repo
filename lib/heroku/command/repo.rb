@@ -107,7 +107,7 @@ EOF
   private
 
   def cache_delete_url
-    releases['cache_delete_url']
+    release['cache_delete_url']
   end
 
   def release
