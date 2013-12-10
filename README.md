@@ -6,7 +6,7 @@ This plugin adds some commands to the heroku gem to interact with the app's repo
 
 To install:
 
-    $ heroku plugins:install https://github.com/heroku/heroku-repo.git
+    $ heroku plugins:install https://github.com/lstoll/heroku-repo.git
 
 ## Commands
 
