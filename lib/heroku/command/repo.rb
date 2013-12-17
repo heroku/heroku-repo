@@ -49,7 +49,7 @@ cd tmp/repo_tmp
 curl -o repo.tgz '#{repo_get_url}'
 cd unpack
 tar -zxf ../repo.tgz
-git gc --aggressive
+git gc
 tar -zcf ../repack.tgz .
 curl -o /dev/null --upload-file ../repack.tgz '#{repo_put_url}'
 exit
