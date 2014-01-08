@@ -83,7 +83,7 @@ EOF
 
   # repo:reset
   #
-  # Reset the repo and cache
+  # Reset the repo
   def reset
     run <<EOF
 set -e
