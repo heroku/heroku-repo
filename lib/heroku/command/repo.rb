@@ -114,12 +114,12 @@ EOF
   end
 
   def release
-   @release ||= api.request(
+    @release ||= api.request(
       :method  => "get",
       :expects => 200,
       :path    => "/apps/#{app}/releases/new",
       :headers => {
-        "Accept"        => "application/vnd.heroku+json; version=2",
+        "Accept" => "application/vnd.heroku+json; version=2",
       }
     ).body
   end
