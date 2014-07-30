@@ -68,13 +68,16 @@ EOF
   #
   # Sets the bare repo for immediate consumption
   def clone
+    # Obtain the url from API before doing fs side effects
+    repo_url = repo_get_url
+
     if File.exist?(app)
       puts "#{app} already exists in the filesystem; aborting."
       return
     end
     FileUtils.mkdir_p("#{app}/.git")
     Dir.chdir("#{app}/.git")
-    system("curl '#{repo_get_url}' | tar xzf -")
+    system("curl '#{repo_url}' | tar xzf -")
     Dir.chdir("..")
     system("git init")
     system("git reset --hard master")
@@ -111,7 +114,14 @@ EOF
   end
 
   def release
-    @release ||= Heroku::OkJson.decode(heroku.get('/apps/' + app + '/releases/new'))
+   @release ||= api.request(
+      :method  => "get",
+      :expects => 200,
+      :path    => "/apps/#{app}/releases/new",
+      :headers => {
+        "Accept"        => "application/vnd.heroku+json; version=2",
+      }
+    ).body
   end
 
   def repo_get_url
