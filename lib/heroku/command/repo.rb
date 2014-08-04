@@ -1,4 +1,5 @@
 require "vendor/heroku/okjson"
+require "tempfile"
 
 # Slug manipulation
 class Heroku::Command::Repo < Heroku::Command::BaseWithApp
