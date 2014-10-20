@@ -1,4 +1,3 @@
-require "vendor/heroku/okjson"
 require "tempfile"
 
 # Slug manipulation
