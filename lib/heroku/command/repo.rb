@@ -38,16 +38,6 @@ EOF
   end
   alias_command "repo:purge-cache", "repo:purge_cache"
 
-  # repo:download-cache
-  #
-  # Downloads the contents of the build cache for an app
-  #
-  def download_cache
-    puts cache_get_url
-    system("curl -o #{app}-cache.tgz '#{cache_get_url}'")
-  end
-  alias_command "repo:download-cache", "repo:download_cache"
-
   # repo:gc
   #
   # Run a git gc --agressive on the applications repository
