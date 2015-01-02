@@ -12,26 +12,27 @@ class Heroku::Command::Repo < Heroku::Command::BaseWithApp
 set -e
 mkdir -p tmp/repo_tmp/unpack
 cd tmp/repo_tmp
-curl -o repo.tgz '#{repo_get_url}'
+curl -o repo-cache.tgz '#{cache_get_url}'
 cd unpack
-tar -zxf ../repo.tgz
-METADATA=".cache/vendor/heroku"
+tar -zxf ../repo-cache.tgz
+METADATA="vendor/heroku"
 if [ -d "$METADATA" ]; then
   TMPDIR=`mktemp -d`
   cp -rf $METADATA $TMPDIR
 fi
-rm -rf .cache
-mkdir .cache
+cd ..
+rm -rf unpack
+mkdir unpack
+cd unpack
 TMPDATA="$TMPDIR/heroku"
-VENDOR=".cache/vendor"
+VENDOR="vendor"
 if [ -d "$TMPDATA" ]; then
   mkdir $VENDOR
   cp -rf $TMPDATA $VENDOR
   rm -rf $TMPDIR
 fi
-tar -zcf ../repack.tgz .
-curl -o /dev/null --upload-file ../repack.tgz '#{repo_put_url}'
-curl --request DELETE '#{cache_delete_url}'
+tar -zcf ../cache-repack.tgz .
+curl -o /dev/null --upload-file ../cache-repack.tgz '#{cache_put_url}'
 exit
 EOF
   end
@@ -119,12 +120,12 @@ EOF
 
   private
 
-  def cache_delete_url
-    release['cache_delete_url']
-  end
-
   def cache_get_url
     release['cache_get_url']
+  end
+
+  def cache_put_url
+    release['cache_put_url']
   end
 
   def release
