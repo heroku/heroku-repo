@@ -78,7 +78,7 @@ EOF
     end
     FileUtils.mkdir_p("#{app}/.git")
     Dir.chdir("#{app}/.git")
-    system("curl '#{repo_url}' | tar xzf -")
+    system("curl -s '#{repo_url}' | tar xzf -")
     Dir.chdir("..")
     system("git init")
     system("git reset --hard master")
