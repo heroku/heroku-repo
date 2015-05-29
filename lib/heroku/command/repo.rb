@@ -100,14 +100,6 @@ exit
 EOF
   end
 
-  # repo:rebuild
-  #
-  # Force a rebuild of the master branch
-  def rebuild
-    reset
-    system "git push #{extract_remote_from_git_config || "heroku"} master"
-  end
-
   private
 
   def cache_get_url
