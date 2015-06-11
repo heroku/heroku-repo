@@ -34,12 +34,6 @@ This will run a `git gc --agressive` against the applications repo. This is done
 
 This will delete the contents of the build cache stored in the repository. This is done inside a run process on the application.
 
-### rebuild
-
-    $ heroku repo:rebuild -a appname
-
-This will empty the remote repository and push the repository up again, effectively triggering an app rebuild.
-
 ### reset
 
     $ heroku repo:reset -a appname
