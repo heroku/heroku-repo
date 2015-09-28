@@ -131,9 +131,25 @@ EOF
 
   def run(cmds)
     require 'open3'
-    stdout, stderr, status = Open3.capture3("heroku run bash -a #{app} --exit-code", stdin_data: cmds)
-    $stderr.write(stdout)
-    $stderr.write(stderr)
-    exit status.exitstatus
+    Open3.popen3("heroku run bash -a #{app} --exit-code") do |stdin, stdout, stderr, wait_thr|
+      stdin.write(cmds)
+      until [stdout, stderr].all? {|f| f.eof?}
+        ready = IO.select([stderr, stdout])
+        if ready
+          readable = ready[0]
+          readable.each do |f|
+            begin
+              if f == stdout
+                $stdout.write f.read_nonblock(50)
+              else
+                $stderr.write f.read_nonblock(50)
+              end
+            rescue EOFError
+            end
+          end
+        end
+      end
+      exit wait_thr.value.exitstatus
+    end
   end
 end
