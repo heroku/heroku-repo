@@ -130,17 +130,9 @@ EOF
   end
 
   def run(cmds)
-    tmpfile = Tempfile.new('heroku-repo')
-    begin
-      tmpfile.write(cmds)
-      tmpfile.close
-      real_stdin = $stdin
-      $stdin = File.open(tmpfile.path, 'r')
-      Heroku::Command::Run.new(["bash"], :app => app).index
-      $stdin = real_stdin
-    ensure
-      tmpfile.close
-      tmpfile.unlink
-    end
+    require 'open3'
+    _, stderr, status = Open3.capture3("heroku run bash -a #{app} --exit-code", stdin_data: cmds)
+    $stderr.write(stderr)
+    exit status.to_i
   end
 end
