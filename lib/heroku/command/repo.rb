@@ -131,7 +131,8 @@ EOF
 
   def run(cmds)
     require 'open3'
-    _, stderr, status = Open3.capture3("heroku run bash -a #{app} --exit-code", stdin_data: cmds)
+    stdout, stderr, status = Open3.capture3("heroku run bash -a #{app} --exit-code", stdin_data: cmds)
+    $stderr.write(stdout)
     $stderr.write(stderr)
     exit status.to_i
   end
