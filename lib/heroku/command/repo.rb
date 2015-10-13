@@ -140,9 +140,9 @@ EOF
           readable.each do |f|
             begin
               if f == stdout
-                $stdout.write f.read_nonblock(50)
+                $stdout.write f.read(50)
               else
-                $stderr.write f.read_nonblock(50)
+                $stderr.write f.read(50)
               end
             rescue EOFError
             end
