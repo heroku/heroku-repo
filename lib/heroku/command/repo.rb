@@ -43,7 +43,7 @@ EOF
   # Download the build cache for debugging
   def download_cache
     puts cache_get_url
-    system("curl -o #{app}-repo.tgz '#{cache_get_url}'")
+    system("curl -o #{app}-cache.tgz '#{cache_get_url}'")
   end
   alias_command "repo:download-cache", "repo:download_cache"
 

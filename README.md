@@ -34,6 +34,12 @@ This will run a `git gc --agressive` against the applications repo. This is done
 
 This will delete the contents of the build cache stored in the repository. This is done inside a run process on the application.
 
+### download_cache
+
+    $ heroku repo:download_cache -a appname
+
+This will download the contents of the build cache as a tarball.
+
 ### reset
 
     $ heroku repo:reset -a appname
