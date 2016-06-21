@@ -6,7 +6,8 @@ exports.topic = {
 }
 
 exports.commands = [
-  require('./commands/purge_cache'),
+  require('./commands/download'),
   require('./commands/gc'),
-  require('./commands/download')
+  require('./commands/purge_cache'),
+  require('./commands/reset')
 ]
