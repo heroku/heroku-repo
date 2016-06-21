@@ -1,0 +1,34 @@
+{
+  "name": "heroku-repo",
+  "description": "Heroku CLI plugin to manipulate the repo",
+  "version": "0.0.0",
+  "author": "Jeff Dickey (@dickeyxxx)",
+  "bugs": {
+    "url": "https://github.com/heroku/heroku-repo/issues"
+  },
+  "dependencies": {
+    "bytes": "2.4.0",
+    "co": "4.6.0",
+    "heroku-cli-util": "6.0.13",
+    "heroku-run": "3.2.14",
+    "smooth-progress": "1.0.4"
+  },
+  "devDependencies": {
+    "standard": "7.1.0"
+  },
+  "homepage": "https://github.com/heroku/heroku-repo",
+  "keywords": [
+    "heroku-plugin"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heroku/heroku-repo.git"
+  },
+  "scripts": {
+    "postversion": "npm publish && git push && git push --tags",
+    "preversion": "npm test",
+    "test": "standard"
+  }
+}
