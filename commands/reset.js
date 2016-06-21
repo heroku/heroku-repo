@@ -8,6 +8,7 @@ function * run (context) {
   let dyno = new Dyno({
     heroku: cli.heroku,
     app: context.app,
+    attach: true,
     command: `set -e
 mkdir -p tmp/repo_tmp/unpack
 cd tmp/repo_tmp/unpack

@@ -5,17 +5,13 @@ const co = require('co')
 
 function * run (context) {
   const download = require('../lib/download')
+  const repo = require('../lib/repo')
   const app = context.app
 
-  let releases = yield cli.heroku.request({
-    path: `/apps/${app}/releases`,
-    headers: {Range: 'version ..; order=desc'}
-  })
-  let id = releases.filter((r) => r.slug)[0].slug.id
-  let slug = yield cli.heroku.get(`/apps/${app}/slugs/${id}`)
+  let url = yield repo.getURL(app)
   let filename = context.args.filename || `${app}-repo.tgz`
   console.error(`Downloading slug to ${filename}`)
-  yield download(slug.blob.url, filename, {progress: true})
+  yield download(url, filename, {progress: true})
 }
 
 module.exports = {
