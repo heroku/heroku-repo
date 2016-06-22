@@ -5,14 +5,17 @@ const co = require('co')
 const {Dyno} = require('heroku-run')
 
 function * run (context) {
+  const repo = require('../lib/repo')
+  const app = context.app
+
   let dyno = new Dyno({
     heroku: cli.heroku,
-    app: context.app,
+    app,
     attach: true,
     command: `set -e
 mkdir -p tmp/repo_tmp/unpack
 cd tmp/repo_tmp
-curl -o repo-cache.tgz '#{cache_get_url}'
+curl -o repo-cache.tgz '${yield repo.getURL(app)}'
 cd unpack
 tar -zxf ../repo-cache.tgz
 METADATA="vendor/heroku"
@@ -32,7 +35,7 @@ if [ -d "$TMPDATA" ]; then
   rm -rf $TMPDIR
 fi
 tar -zcf ../cache-repack.tgz .
-curl -o /dev/null --upload-file ../cache-repack.tgz '#{cache_put_url}'
+curl -o /dev/null --upload-file ../cache-repack.tgz '${yield repo.putURL(app)}'
 exit`
   })
   yield dyno.start()

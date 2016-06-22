@@ -5,16 +5,19 @@ const co = require('co')
 const {Dyno} = require('heroku-run')
 
 function * run (context) {
+  const repo = require('../lib/repo')
+  const app = context.app
+
   let dyno = new Dyno({
     heroku: cli.heroku,
-    app: context.app,
+    app,
     attach: true,
     command: `set -e
 mkdir -p tmp/repo_tmp/unpack
 cd tmp/repo_tmp/unpack
 git init --bare .
 tar -zcf ../repack.tgz .
-curl -o /dev/null --upload-file ../repack.tgz '#{repo_put_url}'
+curl -o /dev/null --upload-file ../repack.tgz '${yield repo.putURL(app)}'
 exit`
   })
   yield dyno.start()
