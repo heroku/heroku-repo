@@ -2,7 +2,7 @@
 
 exports.topic = {
   name: 'repo',
-  description: 'slug manipulation'
+  description: 'repository manipulation'
 }
 
 exports.commands = [

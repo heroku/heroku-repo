@@ -10,7 +10,7 @@ function * run (context) {
 
   let url = yield repo.getURL(app)
   let filename = context.args.filename || `${app}-repo.tgz`
-  console.error(`Downloading slug to ${filename}`)
+  console.error(`Downloading repository to ${filename}`)
   yield download(url, filename, {progress: true})
 }
 
