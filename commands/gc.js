@@ -29,7 +29,7 @@ exit`
 module.exports = {
   topic: 'repo',
   command: 'gc',
-  description: 'run a git gc --agressive on the applications repository',
+  description: "run a git gc --aggressive on an application's repository",
   needsAuth: true,
   needsApp: true,
   run: cli.command(co.wrap(run))
