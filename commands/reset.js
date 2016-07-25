@@ -17,7 +17,7 @@ mkdir -p tmp/repo_tmp/unpack
 cd tmp/repo_tmp/unpack
 git init --bare .
 tar -zcf ../repack.tgz .
-curl -o /dev/null --upload-file ../repack.tgz '${yield repo.putURL(app)}'
+curl -fo /dev/null --upload-file ../repack.tgz '${yield repo.putURL(app)}'
 exit`
   })
   yield dyno.start()
