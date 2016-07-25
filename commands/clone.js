@@ -20,7 +20,7 @@ function * run (context) {
 
   mkdirp.sync(`${app}/.git`)
   process.chdir(`${app}/.git`)
-  exec(`curl '${url}' | tar xzf -`, {stdio: 'inherit'})
+  exec(`curl -f '${url}' | tar xzf -`, {stdio: 'inherit'})
   process.chdir('..')
   exec('git init', {stdio: 'inherit'})
   exec('git reset --hard master', {stdio: 'inherit'})
