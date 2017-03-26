@@ -28,9 +28,9 @@ This will download the applications repo as a tarball.
 
 This will run a `git gc --agressive` against the applications repo. This is done inside a run process on the application.
 
-### purge_cache
+### purge-cache
 
-    $ heroku repo:purge_cache -a appname
+    $ heroku repo:purge-cache -a appname
 
 This will delete the contents of the build cache stored in the repository. This is done inside a run process on the application.
 
