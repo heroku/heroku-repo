@@ -1,7 +1,7 @@
 {
   "name": "heroku-repo",
   "description": "Heroku CLI plugin to manipulate the repo",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "author": "Jeff Dickey (@dickeyxxx)",
   "bugs": {
     "url": "https://github.com/heroku/heroku-repo/issues"
@@ -11,6 +11,7 @@
     "co": "4.6.0",
     "heroku-cli-util": "6.0.14",
     "heroku-run": "3.2.14",
+    "mkdirp": "0.5.1",
     "smooth-progress": "1.0.4"
   },
   "devDependencies": {
