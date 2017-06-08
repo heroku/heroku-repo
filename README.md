@@ -39,3 +39,10 @@ This will delete the contents of the build cache stored in the repository. This 
     $ heroku repo:reset -a appname
 
 This will empty the remote repository.
+
+### config
+
+    $ heroku repo:config receive.fsckObjects true
+
+This will set custom configuration on the distant app repository. Only local configuration can be added.  
+There is no guarantee that Heroku will honor these configuration value, or that we won't be overwriting them in the future.
