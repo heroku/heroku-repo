@@ -2,25 +2,15 @@
 
 const cli = require('heroku-cli-util')
 const co = require('co')
-const {Dyno} = require('heroku-run')
 
-function * run (context) {
-  const repo = require('../lib/repo')
-  const app = context.app
-
-  let dyno = new Dyno({
-    heroku: cli.heroku,
-    app,
-    attach: true,
-    command: `set -e
-mkdir -p tmp/repo_tmp/unpack
-cd tmp/repo_tmp/unpack
-git init --bare .
-tar -zcf ../repack.tgz .
-curl -o /dev/null --upload-file ../repack.tgz '${yield repo.putURL(app)}'
-exit`
+function * run (context, heroku) {
+  let r = heroku.request({
+    method: 'DELETE',
+    path: `/${context.app}.git`,
+    host: `git.${context.gitHost}`
   })
-  yield dyno.start()
+
+  yield cli.action(`Resetting Git repository for ${cli.color.app(context.app)}`, r)
 }
 
 module.exports = {
