@@ -28,7 +28,6 @@
     "url": "https://github.com/heroku/heroku-repo.git"
   },
   "scripts": {
-    "postversion": "npm publish && git push && git push --tags",
     "preversion": "npm test",
     "test": "standard"
   }
