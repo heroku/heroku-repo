@@ -15,7 +15,7 @@
     "smooth-progress": "1.0.4"
   },
   "devDependencies": {
-    "standard": "7.1.0"
+    "standard": "^10.0.2"
   },
   "homepage": "https://github.com/heroku/heroku-repo",
   "keywords": [
