@@ -26,7 +26,7 @@ This will download the applications repo as a tarball.
 
     $ heroku repo:gc -a appname
 
-This will run a `git gc --agressive` against the applications repo. This is done inside a run process on the application.
+This will run a `git gc --aggressive` against the applications repo. This is done inside a run process on the application.
 
 ### purge-cache
 
