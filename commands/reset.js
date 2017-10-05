@@ -7,7 +7,8 @@ function * run (context, heroku) {
   let r = heroku.request({
     method: 'DELETE',
     path: `/${context.app}.git`,
-    host: `git.${context.gitHost}`
+    host: `git.${context.gitHost}`,
+    parseJSON: false
   })
 
   yield cli.action(`Resetting Git repository for ${cli.color.app(context.app)}`, r)
