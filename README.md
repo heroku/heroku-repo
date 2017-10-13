@@ -34,8 +34,6 @@ This will run a `git gc --aggressive` against the applications repo. This is don
 
 This will delete the contents of the build cache stored in the repository. This is done inside a run process on the application.
 
-**WARNING: This command deprecated in favor of the `builds:cache:purge` command in the [heroku-builds](https://github.com/heroku/heroku-builds) plugin**
-
 ### reset
 
     $ heroku repo:reset -a appname
