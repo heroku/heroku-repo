@@ -5,8 +5,6 @@ const co = require('co')
 const {Dyno} = require('heroku-run')
 
 function * run (context) {
-  cli.warn(`WARNING: This command is deprecated in favor of 'builds:cache:purge' in the heroku-builds plugin`)
-
   const repo = require('../lib/repo')
   const app = context.app
 
