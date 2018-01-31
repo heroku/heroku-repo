@@ -9,13 +9,13 @@
   "dependencies": {
     "bytes": "2.4.0",
     "co": "4.6.0",
-    "heroku-cli-util": "6.0.13",
+    "heroku-cli-util": "7.0.0",
     "heroku-run": "3.2.14",
     "mkdirp": "0.5.1",
     "smooth-progress": "1.0.4"
   },
   "devDependencies": {
-    "standard": "^10.0.2"
+    "standard": "^10.0.3"
   },
   "homepage": "https://github.com/heroku/heroku-repo",
   "keywords": [
