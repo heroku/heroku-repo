@@ -30,7 +30,7 @@ function * run (context) {
 module.exports = {
   topic: 'repo',
   command: 'clone',
-  description: 'sets the bare repo for immediate consumption',
+  description: 'set the bare repo for immediate consumption',
   needsAuth: true,
   needsApp: true,
   run: cli.command(co.wrap(run))

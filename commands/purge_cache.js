@@ -44,7 +44,7 @@ exit`
 module.exports = {
   topic: 'repo',
   command: 'purge_cache',
-  description: 'deletes the contents the build cache in the repository',
+  description: 'delete the contents of the build cache in the repository',
   needsAuth: true,
   needsApp: true,
   run: cli.command(co.wrap(run))
