@@ -21,6 +21,11 @@
   "keywords": [
     "heroku-plugin"
   ],
+  "files": [
+    "/index.js",
+    "/commands",
+    "/lib"
+  ],
   "license": "ISC",
   "main": "index.js",
   "repository": {
