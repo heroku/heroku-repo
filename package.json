@@ -7,15 +7,15 @@
     "url": "https://github.com/heroku/heroku-repo/issues"
   },
   "dependencies": {
-    "bytes": "2.4.0",
+    "bytes": "3.0.0",
     "co": "4.6.0",
-    "heroku-cli-util": "7.0.0",
-    "heroku-run": "3.2.14",
+    "heroku-cli-util": "8.0.10",
+    "heroku-run": "3.5.4",
     "mkdirp": "0.5.1",
-    "smooth-progress": "1.0.4"
+    "smooth-progress": "1.1.0"
   },
   "devDependencies": {
-    "standard": "^10.0.3"
+    "standard": "^11.0.1"
   },
   "homepage": "https://github.com/heroku/heroku-repo",
   "keywords": [
