@@ -15,7 +15,7 @@ function * run (context) {
     command: `set -e
 mkdir -p tmp/repo_tmp/unpack
 cd tmp/repo_tmp
-curl -o repo-cache.tgz '${yield repo.getCacheURL(app)}'
+curl -fo repo-cache.tgz '${yield repo.getCacheURL(app)}'
 cd unpack
 tar -zxf ../repo-cache.tgz
 METADATA="vendor/heroku"
@@ -35,7 +35,7 @@ if [ -d "$TMPDATA" ]; then
   rm -rf $TMPDIR
 fi
 tar -zcf ../cache-repack.tgz .
-curl -o /dev/null --upload-file ../cache-repack.tgz '${yield repo.putCacheURL(app)}'
+curl -fo /dev/null --upload-file ../cache-repack.tgz '${yield repo.putCacheURL(app)}'
 exit`
   })
   yield dyno.start()

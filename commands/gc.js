@@ -15,12 +15,12 @@ function * run (context) {
     command: `set -e
 mkdir -p tmp/repo_tmp/unpack
 cd tmp/repo_tmp
-curl -o repo.tgz '${yield repo.getURL(app)}'
+curl -fo repo.tgz '${yield repo.getURL(app)}'
 cd unpack
 tar -zxf ../repo.tgz
 git gc --aggressive
 tar -zcf ../repack.tgz .
-curl -o /dev/null --upload-file ../repack.tgz '${yield repo.putURL(app)}'
+curl -fo /dev/null --upload-file ../repack.tgz '${yield repo.putURL(app)}'
 exit`
   })
   yield dyno.start()
