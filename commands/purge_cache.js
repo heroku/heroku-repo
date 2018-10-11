@@ -2,7 +2,7 @@
 
 const cli = require('heroku-cli-util')
 const co = require('co')
-const {Dyno} = require('heroku-run')
+const {Dyno} = require('@heroku-cli/plugin-run')
 
 function * run (context) {
   const repo = require('../lib/repo')
