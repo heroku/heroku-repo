@@ -28,7 +28,13 @@ This will download the applications repo as a tarball.
 
 This will run a `git gc --aggressive` against the applications repo. This is done inside a run process on the application.
 
-### purge-cache
+### download_cache
+
+    $ heroku repo:download_cache -a appname
+
+This command downloads the build cache for a given application so you can inspect it locally.
+
+### purge_cache
 
     $ heroku repo:purge_cache -a appname
 
@@ -39,3 +45,12 @@ This will delete the contents of the build cache stored in the repository. This 
     $ heroku repo:reset -a appname
 
 This will empty the remote repository.
+
+
+## Local development
+
+To develop this CLI plugin, clone this repo then run:
+
+```
+$ heroku plugins:link ./
+```
