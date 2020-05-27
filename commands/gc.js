@@ -7,10 +7,12 @@ const {Dyno} = require('@heroku-cli/plugin-run')
 function * run (context) {
   const repo = require('../lib/repo')
   const app = context.app
+  const size = context.flags.size
 
   let dyno = new Dyno({
     heroku: cli.heroku,
     app,
+    size,
     attach: true,
     command: `set -e
 mkdir -p tmp/repo_tmp/unpack
@@ -32,5 +34,8 @@ module.exports = {
   description: "run a git gc --aggressive on an application's repository",
   needsAuth: true,
   needsApp: true,
+  flags: [
+    { name: 'size', char: 's', description: 'dyno size', hasValue: true }
+  ],
   run: cli.command(co.wrap(run))
 }

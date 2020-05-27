@@ -7,10 +7,12 @@ const {Dyno} = require('@heroku-cli/plugin-run')
 function * run (context) {
   const repo = require('../lib/repo')
   const app = context.app
+  const size = context.flags.size
 
   let dyno = new Dyno({
     heroku: cli.heroku,
     app,
+    size,
     attach: true,
     command: `set -e
 mkdir -p tmp/repo_tmp/unpack
@@ -47,5 +49,8 @@ module.exports = {
   description: 'delete the contents of the build cache in the repository',
   needsAuth: true,
   needsApp: true,
+  flags: [
+    { name: 'size', char: 's', description: 'dyno size', hasValue: true }
+  ],
   run: cli.command(co.wrap(run))
 }
