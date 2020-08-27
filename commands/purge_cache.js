@@ -17,7 +17,7 @@ mkdir -p tmp/repo_tmp/unpack
 cd tmp/repo_tmp
 curl -fo repo-cache.tgz '${yield repo.getCacheURL(app)}'
 cd unpack
-tar -zxf ../repo-cache.tgz
+tar -zxPf ../repo-cache.tgz
 METADATA="vendor/heroku"
 if [ -d "$METADATA" ]; then
   TMPDIR=\`mktemp -d\`
