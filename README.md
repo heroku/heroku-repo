@@ -1,6 +1,6 @@
 # Heroku Repo plugin
 
-This plugin adds some commands to the heroku gem to interact with the app's repo
+This plugin adds some commands to the heroku gem to interact with an app's repo.
 
 ## Installation
 
