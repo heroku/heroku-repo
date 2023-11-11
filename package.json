@@ -7,7 +7,7 @@
     "url": "https://github.com/heroku/heroku-repo/issues"
   },
   "dependencies": {
-    "@heroku-cli/plugin-run": "3.8.10",
+    "@heroku-cli/plugin-run": "8.0.0",
     "bytes": "3.0.0",
     "co": "4.6.0",
     "heroku-cli-util": "8.0.12",
