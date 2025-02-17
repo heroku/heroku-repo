@@ -7,6 +7,9 @@
     "url": "https://github.com/heroku/heroku-repo/issues"
   },
   "dependencies": {
+    "@heroku-cli/color": "2.0.1",
+    "@heroku-cli/command": "^11.4.0",
+    "@oclif/core": "^2.16.0",
     "@heroku-cli/plugin-run": "3.8.10",
     "bytes": "3.0.0",
     "co": "4.6.0",
@@ -15,11 +18,33 @@
     "smooth-progress": "1.1.0"
   },
   "devDependencies": {
-    "standard": "^11.0.1"
+    "@heroku-cli/schema": "^2.0.0",
+    "@oclif/plugin-help": "^5",
+    "@types/bytes": "^3.1.4",
+    "@types/chai": "^4",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "20.14.8",
+    "chai": "^4.4.1",
+    "eslint": "^8.57.1",
+    "eslint-config-oclif": "^5.2.2",
+    "eslint-config-oclif-typescript": "^3.1.14",
+    "eslint-plugin-mocha": "^10.5.0",
+    "mocha": "^11.1.0",
+    "nock": "^14.0.0",
+    "oclif": "^4.17.13",
+    "nyc": "^17.1.0",
+    "standard": "^11.0.1",
+    "ts-node": "^10.9.1",
+    "tsheredoc": "^1.0.1",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">= 20"
   },
   "homepage": "https://github.com/heroku/heroku-repo",
   "keywords": [
-    "heroku-plugin"
+    "heroku-plugin",
+    "oclif"
   ],
   "files": [
     "/index.js",
@@ -27,13 +52,37 @@
     "/lib"
   ],
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "mocha": {
+    "require": [
+      "test/init.js",
+      "ts-node/register"
+    ],
+    "watch-extensions": "ts",
+    "recursive": true,
+    "reporter": "spec",
+    "timeout": 360000
+  },
+  "types": "dist/index.d.ts",
+  "oclif": {
+    "commands": "./dist/commands",
+    "bin": "heroku",
+    "topics": {
+      "slugs": {
+        "description": "Heroku CLI plugin to manipulate the repo"
+      }
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/heroku/heroku-repo.git"
   },
   "scripts": {
-    "preversion": "npm test",
-    "test": "standard"
+    "build": "rm -rf dist && tsc -b",
+    "lint": "eslint . --ext .ts --config .eslintrc",
+    "postpack": "rm -f oclif.manifest.json",
+    "prepack": "yarn build && oclif manifest && oclif readme",
+    "test": "nyc mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif readme && git add README.md"
   }
 }
