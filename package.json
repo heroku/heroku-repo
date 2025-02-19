@@ -13,6 +13,7 @@
     "@heroku-cli/plugin-run": "3.8.10",
     "bytes": "3.0.0",
     "co": "4.6.0",
+    "debug": "^4.4.0",
     "heroku-cli-util": "8.0.12",
     "mkdirp": "0.5.1",
     "smooth-progress": "1.1.0"
@@ -22,6 +23,7 @@
     "@oclif/plugin-help": "^5",
     "@types/bytes": "^3.1.4",
     "@types/chai": "^4",
+    "@types/debug": "^4.1.12",
     "@types/mocha": "^10.0.1",
     "@types/node": "^20.14.8",
     "chai": "^4.4.1",
