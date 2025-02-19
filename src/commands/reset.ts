@@ -3,7 +3,7 @@ import color from '@heroku-cli/color'
 import * as Heroku from '@heroku-cli/schema'
 import {ux} from '@oclif/core'
 
-export default class Clone extends Command {
+export default class Reset extends Command {
   static description = 'clone the application repo to your local filesystem'
   static flags = {
     app: flags.app({required: true}),
@@ -11,7 +11,7 @@ export default class Clone extends Command {
   }
 
   async run() {
-    const {flags} = await this.parse(Clone)
+    const {flags} = await this.parse(Reset)
     const {app} = flags
     ux.action.start(`Resetting Git repository for  ${color.app(app)}`)
     await this.heroku.delete(`/${app}/git`, {
