@@ -6,7 +6,7 @@ import fs from "fs";
 import {execSync} from "child_process";
 
 export default class Clone extends Command {
-  static description = 'set the bare repo for immediate consumption'
+  static description = 'clone the application repo to your local filesystem'
   static flags = {
     app: flags.app({required: true}),
     remote: flags.string({char: 'r', description: 'the git remote to use'}),
