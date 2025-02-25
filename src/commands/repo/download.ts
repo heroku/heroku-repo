@@ -1,7 +1,7 @@
 import {Command, flags} from '@heroku-cli/command'
 import {Args, ux} from '@oclif/core'
 import {getURL} from '../../lib/repo'
-import download from '../../lib/download'
+import {download} from '../../lib/download'
 
 export default class Download extends Command {
   static description = 'download the application repo as a tarball'

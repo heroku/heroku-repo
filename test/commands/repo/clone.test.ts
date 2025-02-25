@@ -1,5 +1,4 @@
 import {expect} from 'chai'
-import {stderr, stdout} from 'stdout-stderr'
 import nock from 'nock'
 import * as sinon from 'sinon'
 import * as fs from "../../../src/lib/file-helper";
