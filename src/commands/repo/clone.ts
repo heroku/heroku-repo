@@ -2,8 +2,7 @@ import {Command, flags} from '@heroku-cli/command'
 import * as Heroku from '@heroku-cli/schema'
 import {ux} from '@oclif/core'
 import {getURL} from '../../lib/repo'
-import * as fs from "fs";
-import {execSync} from 'node:child_process'
+import{existsSync, mkdirSync, execSyncHelper} from "../../lib/file-helper"
 
 export default class Clone extends Command {
   static description = 'clone the application repo to your local filesystem'
@@ -18,26 +17,26 @@ export default class Clone extends Command {
     const url = await getURL(app as string, this.heroku)
     const {body: info} = await this.heroku.get<Heroku.App>(`/apps/${app}`)
 
-    if (fs.existsSync(app as string)) {
+    if (existsSync(app as string)) {
       ux.error(`${app} already exists in the filesystem. Aborting.`)
     }
 
-    fs.mkdirSync(`${app}/.git`, {recursive: true})
+    mkdirSync(`${app}/.git`, {recursive: true})
     process.chdir(`${app}/.git`)
-    execSync(
+    execSyncHelper(
       `curl -f '${url}' | tar xzf -`,
       {stdio: 'inherit'}
     )
     process.chdir('..')
-    execSync(
+    execSyncHelper(
       'git init',
       {stdio: 'inherit'}
     )
-    execSync(
+    execSyncHelper(
       'git reset --hard main',
       {stdio: 'inherit'}
     )
-    execSync(
+    execSyncHelper(
       `git remote add heroku ${info.git_url}`,
       {stdio: 'inherit'}
     )
