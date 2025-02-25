@@ -59,16 +59,6 @@
   ],
   "license": "MIT",
   "main": "dist/index.js",
-  "mocha": {
-    "require": [
-      "test/init.js",
-      "ts-node/register"
-    ],
-    "watch-extensions": "ts",
-    "recursive": true,
-    "reporter": "spec",
-    "timeout": 360000
-  },
   "types": "dist/index.d.ts",
   "oclif": {
     "commands": "./dist/commands",
