@@ -1,6 +1,5 @@
 import {expect} from 'chai'
 import {stdout} from 'stdout-stderr'
-import nock from 'nock'
 import * as sinon from 'sinon'
 import Cmd from '../../../src/commands/repo/download'
 import {runCommand} from '../../run-command'
@@ -8,19 +7,15 @@ import * as repo from '../../../src/lib/repo'
 import * as download from '../../../src/lib/download'
 
 describe('repo:download', function () {
-  let api: nock.Scope
   let getURLStub: sinon.SinonStub
   let downloadStub: sinon.SinonStub
 
   beforeEach(function () {
-    api = nock('https://api.heroku.com')
     getURLStub = sinon.stub(repo, 'getURL')
     downloadStub = sinon.stub(download, 'download')
   })
 
   afterEach(function () {
-    api.done()
-    nock.cleanAll()
     sinon.restore()
   })
 
