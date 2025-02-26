@@ -8,6 +8,7 @@ export default class PurgeCache extends Command {
     app: flags.app({required: true}),
     remote: flags.string({char: 'r', description: 'the git remote to use'}),
   }
+  static aliases = ['purge_cache']
 
   async run() {
     const {flags} = await this.parse(PurgeCache)
