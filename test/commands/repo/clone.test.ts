@@ -4,7 +4,6 @@ import * as sinon from 'sinon'
 import * as fs from "../../../src/lib/file-helper";
 import Cmd from '../../../src/commands/repo/clone'
 import {runCommand} from '../../run-command'
-import {execSyncHelper} from "../../../src/lib/file-helper";
 
 const app = {
   id: 'app-id',

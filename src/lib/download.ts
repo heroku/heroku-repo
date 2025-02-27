@@ -1,7 +1,7 @@
-import fs from 'fs'
 import https from 'https'
-import {pipeline} from "node:stream";
-import {IncomingMessage} from "node:http";
+import {IncomingMessage} from 'node:http'
+import {createWriteStream} from './file-helper'
+import {pipeline} from 'node:stream/promises'
 
 const bytes = require('bytes')
 const progress = require('smooth-progress')
@@ -19,12 +19,10 @@ function showProgress(rsp: IncomingMessage) {
   })
 }
 
-export function download(url: string, path: string, opts: {progress: boolean}): Promise<void> {
-  return new Promise(function (resolve, reject) {
-    const file = fs.createWriteStream(path)
-    https.get(url, function (rsp) {
+export function download(url: string, path: string, opts: {progress: boolean}) {
+    const file = createWriteStream(path)
+    https.get(url, async function (rsp: IncomingMessage) {
       if (opts.progress) showProgress(rsp)
-      pipeline(rsp, file)
+      await pipeline(rsp, file)
     })
-  })
 }

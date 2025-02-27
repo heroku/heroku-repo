@@ -114,7 +114,7 @@ export default class Dyno extends Duplex {
     try {
       const dyno = await this.heroku.post(this.opts.dyno ? `/apps/${this.opts.app}/dynos/${this.opts.dyno}` : `/apps/${this.opts.app}/dynos`, {
         headers: {
-          Accept: this.opts.dyno ? 'application/vnd.heroku+json; version=3.run-inside' : 'application/vnd.heroku+json; version=3',
+          Accept: 'application/vnd.heroku+json; version=3.sdk',
         },
         body: {
           command,
