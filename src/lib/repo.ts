@@ -30,13 +30,3 @@ export async function putURL(appName: string, herokuAPI: APIClient) {
     const release = await getRelease(appName, herokuAPI)
     return release.repo_put_url
 }
-
-export async function getCacheURL(appName: string, herokuAPI: APIClient) {
-    const release = await getRelease(appName, herokuAPI)
-    return release.cache_get_url
-}
-
-export async function putCacheURL(appName: string, herokuAPI: APIClient) {
-    const release = await getRelease(appName, herokuAPI)
-    return release.cache_put_url
-}
