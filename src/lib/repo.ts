@@ -13,7 +13,11 @@ type BuildMetadata = {
     repo_put_url: string,
 }
 async function getRelease(appName: string, herokuAPI: APIClient) {
-  const {body: release} = await herokuAPI.get<BuildMetadata>(`/apps/${appName}/build-metadata`,)
+  const {body: release} = await herokuAPI.get<BuildMetadata>(`/apps/${appName}/build-metadata`, {
+    headers: {
+      Accept: 'application/vnd.heroku+json; version=3.sdk',
+    }
+  })
   return release
 }
 
