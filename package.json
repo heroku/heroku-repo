@@ -9,12 +9,10 @@
   "dependencies": {
     "@heroku-cli/color": "2.0.1",
     "@heroku-cli/command": "^11.4.0",
-    "@heroku-cli/plugin-run": "3.8.10",
+    "@heroku-cli/notifications": "^1.2.5",
     "@oclif/core": "^2.16.0",
     "bytes": "3.0.0",
-    "co": "4.6.0",
     "debug": "^4.4.0",
-    "heroku-cli-util": "8.0.12",
     "mkdirp": "0.5.1",
     "smooth-progress": "1.1.0"
   },
@@ -40,7 +38,6 @@
     "oclif": "^4.17.13",
     "proxyquire": "^2.1.0",
     "sinon": "^19.0.2",
-    "standard": "^11.0.1",
     "stdout-stderr": "^0.1.13",
     "ts-node": "^10.9.1",
     "tsheredoc": "^1.0.1",
