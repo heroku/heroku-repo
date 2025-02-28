@@ -1,14 +1,15 @@
 import {Command, flags} from '@heroku-cli/command'
-import {getURL, putURL} from '../../lib/repo'
+
 import Dyno from '../../lib/dyno'
+import {getURL, putURL} from '../../lib/repo'
 
 export default class PurgeCache extends Command {
-  static description = `delete the contents of the build cache in the repository`
+  static aliases = ['purge_cache']
+  static description = 'delete the contents of the build cache in the repository'
   static flags = {
     app: flags.app({required: true}),
     remote: flags.string({char: 'r', description: 'the git remote to use'}),
   }
-  static aliases = ['purge_cache']
 
   async run() {
     const {flags} = await this.parse(PurgeCache)
@@ -43,10 +44,10 @@ curl -fo /dev/null --upload-file ../cache-repack.tgz '${repoPutURL}'
 exit`
 
     const dyno = new Dyno({
-      heroku: this.heroku,
       app: app as string,
       attach: true,
-      command
+      command,
+      heroku: this.heroku,
     })
     await dyno.start()
   }

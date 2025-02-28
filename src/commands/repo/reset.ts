@@ -1,5 +1,5 @@
-import {Command, flags, vars} from '@heroku-cli/command'
 import color from '@heroku-cli/color'
+import {Command, flags, vars} from '@heroku-cli/command'
 import {ux} from '@oclif/core'
 
 export default class Reset extends Command {
@@ -14,8 +14,8 @@ export default class Reset extends Command {
     const {app} = flags
     ux.action.start(`Resetting Git repository for  ${color.app(app)}`)
     await this.heroku.request(`/${app}/git`, {
+      hostname: vars.httpGitHost,
       method: 'DELETE',
-      hostname: vars.httpGitHost
     })
     ux.action.stop()
   }

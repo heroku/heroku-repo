@@ -1,8 +1,9 @@
 import {Command, flags} from '@heroku-cli/command'
 import * as Heroku from '@heroku-cli/schema'
 import {ux} from '@oclif/core'
+
+import {execSyncHelper, existsSync, mkdirSync} from '../../lib/file-helper'
 import {getURL} from '../../lib/repo'
-import{existsSync, mkdirSync, execSyncHelper} from "../../lib/file-helper"
 
 export default class Clone extends Command {
   static description = 'clone the application repo to your local filesystem'

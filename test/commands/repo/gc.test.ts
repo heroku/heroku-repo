@@ -1,9 +1,10 @@
 import {expect} from 'chai'
 import * as sinon from 'sinon'
+
 import Cmd from '../../../src/commands/repo/gc'
-import {runCommand} from '../../run-command'
-import * as repo from '../../../src/lib/repo'
 import Dyno from '../../../src/lib/dyno'
+import * as repo from '../../../src/lib/repo'
+import {runCommand} from '../../run-command'
 
 describe('repo:gc', function () {
   let getURLStub: sinon.SinonStub
@@ -11,8 +12,8 @@ describe('repo:gc', function () {
   let dynoStub: sinon.SinonStub
   let dynoOpts: {
     app: string,
-    command: string,
     attach: boolean,
+    command: string,
   }
 
   const commandString = `set -e
@@ -30,7 +31,7 @@ exit`
     getURLStub = sinon.stub(repo, 'getURL')
     putURLStub = sinon.stub(repo, 'putURL')
     dynoStub = sinon.stub(Dyno.prototype, 'start').callsFake(function () {
-      // @ts-ignore
+      // @ts-expect-error
       dynoOpts = this.opts
       return Promise.resolve()
     })

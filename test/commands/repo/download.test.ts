@@ -1,10 +1,11 @@
 import {expect} from 'chai'
-import {stdout} from 'stdout-stderr'
 import * as sinon from 'sinon'
+import {stdout} from 'stdout-stderr'
+
 import Cmd from '../../../src/commands/repo/download'
-import {runCommand} from '../../run-command'
-import * as repo from '../../../src/lib/repo'
 import * as download from '../../../src/lib/download'
+import * as repo from '../../../src/lib/repo'
+import {runCommand} from '../../run-command'
 
 describe('repo:download', function () {
   let getURLStub: sinon.SinonStub
@@ -26,7 +27,7 @@ describe('repo:download', function () {
 
     await runCommand(Cmd, [
       '--app',
-      'myapp'
+      'myapp',
     ])
 
     expect(getURLStub.calledWith('myapp')).to.be.true

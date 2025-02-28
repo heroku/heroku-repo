@@ -1,8 +1,9 @@
-import { expect } from 'chai'
-import nock from "nock";
 import {APIClient} from '@heroku-cli/command'
 import {Config} from '@oclif/core'
-import {getURL, putURL} from "../../src/lib/repo";
+import {expect} from 'chai'
+import nock from 'nock'
+
+import {getURL, putURL} from '../../src/lib/repo'
 
 export const getConfig = async () => {
   const pjsonPath = require.resolve('../../package.json')
@@ -18,8 +19,8 @@ export const getHerokuAPI = async () => {
 
 const metadataResponse = {
   app: {
-    name: 'myapp',
     id: '123',
+    name: 'myapp',
   },
   cache_delete_url: 'https://cache-delete-url.com',
   cache_get_url: 'https://cache-get-url.com',

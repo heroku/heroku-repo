@@ -1,6 +1,6 @@
 import {Command} from '@heroku-cli/command'
 import {Config} from '@oclif/core'
-import {stdout, stderr} from 'stdout-stderr'
+import {stderr, stdout} from 'stdout-stderr'
 
 type CmdConstructorParams = ConstructorParameters<typeof Command>
 export type GenericCmd = new (...args: CmdConstructorParams) => Command

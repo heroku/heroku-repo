@@ -1,32 +1,33 @@
 import {expect} from 'chai'
 import nock from 'nock'
 import * as sinon from 'sinon'
-import * as fs from "../../../src/lib/file-helper";
+
 import Cmd from '../../../src/commands/repo/clone'
+import * as fs from '../../../src/lib/file-helper'
 import {runCommand} from '../../run-command'
 
 const app = {
-  id: 'app-id',
-  name: 'myapp',
-  database_size: 1000,
+  build_stack: {name: 'cedar-14'},
   create_status: 'complete',
+  database_size: 1000,
+  generation: 'cedar',
+  git_url: 'https://git.heroku.com/myapp',
+  id: 'app-id',
+  internal_routing: true,
+  name: 'myapp',
+  owner: {email: 'foo@foo.com'},
+  region: {name: 'eu'},
   repo_size: 1000,
   slug_size: 1000,
-  git_url: 'https://git.heroku.com/myapp',
-  web_url: 'https://myapp.herokuapp.com',
-  region: {name: 'eu'},
-  build_stack: {name: 'cedar-14'},
-  stack: {name: 'cedar-14'},
-  owner: {email: 'foo@foo.com'},
   space: {name: 'myspace'},
-  generation: 'cedar',
-  internal_routing: true,
+  stack: {name: 'cedar-14'},
+  web_url: 'https://myapp.herokuapp.com',
 }
 
 const buildMetadata = {
   app: {
-    name: 'myapp',
     id: 'app-id',
+    name: 'myapp',
   },
   cache_delete_url: 'https://cache-delete.com',
   cache_get_url: 'https://cache-get.com',
@@ -45,9 +46,9 @@ describe('repo:clone', function () {
 
   beforeEach(function () {
     api = nock('https://api.heroku.com')
-    existsSyncStub = sinon.stub(fs, 'existsSync');
-    mkdirSyncStub = sinon.stub(fs, 'mkdirSync');
-    chdirStub = sinon.stub(process, 'chdir');
+    existsSyncStub = sinon.stub(fs, 'existsSync')
+    mkdirSyncStub = sinon.stub(fs, 'mkdirSync')
+    chdirStub = sinon.stub(process, 'chdir')
     execSyncHelperStub = sinon.stub(fs, 'execSyncHelper')
   })
 
@@ -68,7 +69,7 @@ describe('repo:clone', function () {
 
     await runCommand(Cmd, [
       '--app',
-      'myapp'
+      'myapp',
     ])
 
     expect(existsSyncStub.called).to.equal(true)
@@ -84,16 +85,16 @@ describe('repo:clone', function () {
       .get('/apps/myapp')
       .reply(200, app)
 
-    existsSyncStub.withArgs('myapp').returns(true);
+    existsSyncStub.withArgs('myapp').returns(true)
 
     await runCommand(Cmd, [
       '--app',
-      'myapp'
+      'myapp',
     ]).catch(error => {
       const {message} = error as { message: string }
       expect(message).to.equal('myapp already exists in the filesystem. Aborting.')
     })
 
-    expect(mkdirSyncStub.called).to.be.false;
+    expect(mkdirSyncStub.called).to.be.false
   })
 })

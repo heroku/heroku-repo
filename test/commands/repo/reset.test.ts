@@ -1,8 +1,9 @@
 import {expect} from 'chai'
 import nock from 'nock'
+import {stderr} from 'stdout-stderr'
+
 import Cmd from '../../../src/commands/repo/reset'
 import {runCommand} from '../../run-command'
-import {stderr} from "stdout-stderr";
 
 describe('repo:reset', function () {
   let api: nock.Scope
@@ -23,7 +24,7 @@ describe('repo:reset', function () {
 
     await runCommand(Cmd, [
       '--app',
-      'myapp'
+      'myapp',
     ])
 
     expect(stderr.output).to.include('Resetting Git repository for  ⬢ myapp')

@@ -1,9 +1,10 @@
 import {Command, flags} from '@heroku-cli/command'
-import {getURL, putURL} from '../../lib/repo'
+
 import Dyno from '../../lib/dyno'
+import {getURL, putURL} from '../../lib/repo'
 
 export default class Gc extends Command {
-  static description = `run a git gc --aggressive on an application's repository`
+  static description = 'run a git gc --aggressive on an application\'s repository'
   static flags = {
     app: flags.app({required: true}),
     remote: flags.string({char: 'r', description: 'the git remote to use'}),
@@ -27,10 +28,10 @@ curl -fo /dev/null --upload-file ../repack.tgz '${repoPutURL}'
 exit`
 
     const dyno = new Dyno({
-      heroku: this.heroku,
       app: app as string,
       attach: true,
-      command
+      command,
+      heroku: this.heroku,
     })
     await dyno.start()
   }
