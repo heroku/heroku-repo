@@ -15,6 +15,9 @@ export default class Reset extends Command {
     ux.action.start(`Resetting Git repository for  ${color.app(app)}`)
     await this.heroku.delete(`/${app}.git`, {
       hostname: vars.httpGitHost,
+      headers: {
+        Authorization: `Basic ${Buffer.from(`:${this.heroku.auth}`).toString('base64')}`,
+      },
     })
     ux.action.stop()
   }
