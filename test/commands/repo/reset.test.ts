@@ -4,6 +4,7 @@ import {stderr} from 'stdout-stderr'
 
 import Cmd from '../../../src/commands/repo/reset'
 import {runCommand} from '../../run-command'
+import stripAnsi from '../../helpers/strip-ansi'
 
 describe('repo:reset', function () {
   let api: nock.Scope
@@ -27,6 +28,6 @@ describe('repo:reset', function () {
       'myapp',
     ])
 
-    expect(stderr.output).to.include('Resetting Git repository for  ⬢ myapp')
+    expect(stripAnsi(stderr.output)).to.contain('Resetting Git repository for  myapp')
   })
 })
