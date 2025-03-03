@@ -33,10 +33,19 @@ export default class Clone extends Command {
       'git init',
       {stdio: 'inherit'}
     )
-    execSyncHelper(
-      'git reset --hard main',
-      {stdio: 'inherit'}
-    )
+
+    try {
+      execSyncHelper(
+        'git reset --hard main',
+        {stdio: 'inherit'}
+      )
+    } catch {
+      execSyncHelper(
+        'git reset --hard master',
+        {stdio: 'inherit'}
+      )
+    }
+
     execSyncHelper(
       `git remote add heroku ${info.git_url}`,
       {stdio: 'inherit'}

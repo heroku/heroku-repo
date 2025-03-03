@@ -7,8 +7,8 @@ import * as repo from '../../../src/lib/repo'
 import {runCommand} from '../../run-command'
 
 describe('repo:purge-cache', function () {
-  let getURLStub: sinon.SinonStub
-  let putURLStub: sinon.SinonStub
+  let getCacheURLStub: sinon.SinonStub
+  let putCacheURLStub: sinon.SinonStub
   let dynoStub: sinon.SinonStub
   let dynoOpts: {
     app: string,
@@ -19,7 +19,7 @@ describe('repo:purge-cache', function () {
   const commandString = `set -e
 mkdir -p tmp/repo_tmp/unpack
 cd tmp/repo_tmp
-curl -fo repo-cache.tgz 'https://get-url.com'
+curl -fo repo-cache.tgz 'https://get-cache-url.com'
 cd unpack
 tar -zxf ../repo-cache.tgz
 METADATA="vendor/heroku"
@@ -39,12 +39,12 @@ if [ -d "$TMPDATA" ]; then
   rm -rf $TMPDIR
 fi
 tar -zcf ../cache-repack.tgz .
-curl -fo /dev/null --upload-file ../cache-repack.tgz 'https://put-url.com'
+curl -fo /dev/null --upload-file ../cache-repack.tgz 'https://put-cache-url.com'
 exit`
 
   beforeEach(function () {
-    getURLStub = sinon.stub(repo, 'getURL')
-    putURLStub = sinon.stub(repo, 'putURL')
+    getCacheURLStub = sinon.stub(repo, 'getCacheURL')
+    putCacheURLStub = sinon.stub(repo, 'putCacheURL')
     dynoStub = sinon.stub(Dyno.prototype, 'start').callsFake(function () {
       // @ts-expect-error
       dynoOpts = this.opts
@@ -57,8 +57,8 @@ exit`
   })
 
   it('should create Dyno with correct configuration', async function () {
-    getURLStub.returns(Promise.resolve('https://get-url.com'))
-    putURLStub.returns(Promise.resolve('https://put-url.com'))
+    getCacheURLStub.returns(Promise.resolve('https://get-cache-url.com'))
+    putCacheURLStub.returns(Promise.resolve('https://put-cache-url.com'))
 
     await runCommand(Cmd, ['--app', 'myapp'])
 

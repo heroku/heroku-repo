@@ -3,7 +3,7 @@ import {Config} from '@oclif/core'
 import {expect} from 'chai'
 import nock from 'nock'
 
-import {getURL, putURL} from '../../src/lib/repo'
+import {getCacheURL, getURL, putCacheURL, putURL} from '../../src/lib/repo'
 
 export const getConfig = async () => {
   const pjsonPath = require.resolve('../../package.json')
@@ -57,6 +57,20 @@ describe('repo helper commands', function () {
     it('should return the repo_put_url', async function () {
       const url = await putURL('myapp', herokuAPI)
       expect(url).to.equal('https://repo-put-url.com')
+    })
+  })
+
+  describe('getCacheURL', function () {
+    it('should return the cache_get_url', async function () {
+      const url = await getCacheURL('myapp', herokuAPI)
+      expect(url).to.equal('https://cache-get-url.com')
+    })
+  })
+
+  describe('putCacheURL', function () {
+    it('should return the cache_put_url', async function () {
+      const url = await putCacheURL('myapp', herokuAPI)
+      expect(url).to.equal('https://cache-put-url.com')
     })
   })
 })

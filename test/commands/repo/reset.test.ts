@@ -19,7 +19,7 @@ describe('repo:reset', function () {
 
   it('calls the correct API endpoint and shows the correct action message', async function () {
     api
-      .delete('/myapp/git')
+      .delete('/myapp.git')
       .reply(200)
 
     await runCommand(Cmd, [

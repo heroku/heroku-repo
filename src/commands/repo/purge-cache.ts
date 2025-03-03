@@ -1,10 +1,10 @@
 import {Command, flags} from '@heroku-cli/command'
 
 import Dyno from '../../lib/dyno'
-import {getURL, putURL} from '../../lib/repo'
+import {getCacheURL, putCacheURL} from '../../lib/repo'
 
 export default class PurgeCache extends Command {
-  static aliases = ['purge_cache']
+  static aliases = ['repo:purge_cache']
   static description = 'delete the contents of the build cache in the repository'
   static flags = {
     app: flags.app({required: true}),
@@ -14,13 +14,13 @@ export default class PurgeCache extends Command {
   async run() {
     const {flags} = await this.parse(PurgeCache)
     const {app} = flags
-    const repoGetURL = await getURL(app as string, this.heroku)
-    const repoPutURL = await putURL(app as string, this.heroku)
+    const repoGetCacheURL = await getCacheURL(app as string, this.heroku)
+    const repoPutCacheURL = await putCacheURL(app as string, this.heroku)
 
     const command = `set -e
 mkdir -p tmp/repo_tmp/unpack
 cd tmp/repo_tmp
-curl -fo repo-cache.tgz '${repoGetURL}'
+curl -fo repo-cache.tgz '${repoGetCacheURL}'
 cd unpack
 tar -zxf ../repo-cache.tgz
 METADATA="vendor/heroku"
@@ -40,7 +40,7 @@ if [ -d "$TMPDATA" ]; then
   rm -rf $TMPDIR
 fi
 tar -zcf ../cache-repack.tgz .
-curl -fo /dev/null --upload-file ../cache-repack.tgz '${repoPutURL}'
+curl -fo /dev/null --upload-file ../cache-repack.tgz '${repoPutCacheURL}'
 exit`
 
     const dyno = new Dyno({

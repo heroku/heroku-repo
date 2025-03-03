@@ -108,7 +108,7 @@ export default class Dyno extends Duplex {
   async start() {
     this._startedAt = Date.now()
     if (this.opts.showStatus) {
-      ux.action.start(`Running ${color.command(this.opts.command)} on ${color.app(this.opts.app)}`)
+      ux.action.start(`Running ${color.cmd(this.opts.command)} on ${color.app(this.opts.app)}`)
     }
 
     await this._doStart()

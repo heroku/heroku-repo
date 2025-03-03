@@ -13,9 +13,8 @@ export default class Reset extends Command {
     const {flags} = await this.parse(Reset)
     const {app} = flags
     ux.action.start(`Resetting Git repository for  ${color.app(app)}`)
-    await this.heroku.request(`/${app}/git`, {
+    await this.heroku.delete(`/${app}.git`, {
       hostname: vars.httpGitHost,
-      method: 'DELETE',
     })
     ux.action.stop()
   }
