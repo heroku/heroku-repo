@@ -1,5 +1,5 @@
 {
-  "name": "@heroku-cli/heroku-repo",
+  "name": "@heroku-cli/plugin-heroku-repo",
   "description": "Heroku CLI plugin to manipulate the repo",
   "version": "1.0.14",
   "author": "Heroku",
@@ -79,11 +79,12 @@
     "url": "https://github.com/heroku/heroku-repo.git"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc -b",
+    "build": "rm -rf dist && tsc -b && oclif manifest && oclif readme && mv oclif.manifest.json ./dist/oclif.manifest.json && cp README.md ./dist/README.md",
     "lint": "eslint . --ext .ts --config .eslintrc",
-    "postpack": "rm -f oclif.manifest.json",
-    "prepack": "yarn build && oclif manifest && oclif readme",
+    "posttest": "npm run lint",
+    "prepare": "yarn build",
     "test": "nyc mocha --forbid-only \"test/**/*.test.ts\"",
+    "test:local": "nyc mocha \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   }
 }
