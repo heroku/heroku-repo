@@ -58,9 +58,7 @@
     "oclif"
   ],
   "files": [
-    "/index.js",
-    "/commands",
-    "/lib"
+    "/dist"
   ],
   "license": "MIT",
   "main": "dist/index.js",
