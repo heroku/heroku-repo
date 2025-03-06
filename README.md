@@ -1,41 +1,145 @@
-# Heroku Repo plugin
+@heroku-cli/plugin-heroku-repo
+==============================
 
-This plugin adds some commands to the heroku gem to interact with the app's repo
+Heroku Repo CLI Plugin
 
-## Installation
+<!-- toc -->
+* [Usage](#usage)
+* [Commands](#commands)
+<!-- tocstop -->
 
-To install:
+# Usage
+```sh-session
+$ heroku plugins:install @heroku-cli/plugin-heroku-repo
+$ heroku repo:COMMAND
+running command...
+$ heroku repo --help [COMMAND]
+USAGE
+  $ heroku repo:COMMAND
+...
+```
 
-    $ heroku plugins:install heroku-repo
+# Commands
+<!-- commands -->
+* [`heroku repo:clone`](#heroku-repoclone)
+* [`heroku repo:download [FILENAME]`](#heroku-repodownload-filename)
+* [`heroku repo:gc`](#heroku-repogc)
+* [`heroku repo:purge_cache`](#heroku-repopurge_cache)
+* [`heroku repo:purge-cache`](#heroku-repopurge-cache)
+* [`heroku repo:reset`](#heroku-reporeset)
 
-## Commands
+## `heroku repo:clone`
 
-### clone
+clone the application repo to your local filesystem
 
-    $ heroku repo:clone -a appname
+```
+USAGE
+  $ heroku repo:clone -a <value> [-r <value>]
 
-This will clone the applications repo to your local filesystem. No collaboration necessary!
+FLAGS
+  -a, --app=<value>     (required) app to run command against
+  -r, --remote=<value>  the git remote to use
 
-### download
+DESCRIPTION
+  clone the application repo to your local filesystem
+```
 
-    $ heroku repo:download -a appname
+_See code: [src/commands/repo/clone.ts](https://github.com/heroku/heroku-repo/blob/v1.0.14/src/commands/repo/clone.ts)_
 
-This will download the applications repo as a tarball.
+## `heroku repo:download [FILENAME]`
 
-### gc
+download the application repo as a tarball
 
-    $ heroku repo:gc -a appname
+```
+USAGE
+  $ heroku repo:download [FILENAME] -a <value> [-r <value>]
 
-This will run a `git gc --aggressive` against the applications repo. This is done inside a run process on the application.
+ARGUMENTS
+  FILENAME  a filename for the tarball
 
-### purge-cache
+FLAGS
+  -a, --app=<value>     (required) app to run command against
+  -r, --remote=<value>  the git remote to use
 
-    $ heroku repo:purge_cache -a appname
+DESCRIPTION
+  download the application repo as a tarball
+```
 
-This will delete the contents of the build cache stored in the repository. This is done inside a run process on the application.
+_See code: [src/commands/repo/download.ts](https://github.com/heroku/heroku-repo/blob/v1.0.14/src/commands/repo/download.ts)_
 
-### reset
+## `heroku repo:gc`
 
-    $ heroku repo:reset -a appname
+run a git gc --aggressive on an application's repository
 
-This will empty the remote repository.
+```
+USAGE
+  $ heroku repo:gc -a <value> [-r <value>]
+
+FLAGS
+  -a, --app=<value>     (required) app to run command against
+  -r, --remote=<value>  the git remote to use
+
+DESCRIPTION
+  run a git gc --aggressive on an application's repository
+```
+
+_See code: [src/commands/repo/gc.ts](https://github.com/heroku/heroku-repo/blob/v1.0.14/src/commands/repo/gc.ts)_
+
+## `heroku repo:purge_cache`
+
+delete the contents of the build cache in the repository
+
+```
+USAGE
+  $ heroku repo:purge_cache -a <value> [-r <value>]
+
+FLAGS
+  -a, --app=<value>     (required) app to run command against
+  -r, --remote=<value>  the git remote to use
+
+DESCRIPTION
+  delete the contents of the build cache in the repository
+
+ALIASES
+  $ heroku repo:purge_cache
+```
+
+## `heroku repo:purge-cache`
+
+delete the contents of the build cache in the repository
+
+```
+USAGE
+  $ heroku repo:purge-cache -a <value> [-r <value>]
+
+FLAGS
+  -a, --app=<value>     (required) app to run command against
+  -r, --remote=<value>  the git remote to use
+
+DESCRIPTION
+  delete the contents of the build cache in the repository
+
+ALIASES
+  $ heroku repo:purge_cache
+```
+
+_See code: [src/commands/repo/purge-cache.ts](https://github.com/heroku/heroku-repo/blob/v1.0.14/src/commands/repo/purge-cache.ts)_
+
+## `heroku repo:reset`
+
+reset the repo
+
+```
+USAGE
+  $ heroku repo:reset -a <value> [-r <value>]
+
+FLAGS
+  -a, --app=<value>     (required) app to run command against
+  -r, --remote=<value>  the git remote to use
+
+DESCRIPTION
+  reset the repo
+```
+
+_See code: [src/commands/repo/reset.ts](https://github.com/heroku/heroku-repo/blob/v1.0.14/src/commands/repo/reset.ts)_
+<!-- commandsstop -->
