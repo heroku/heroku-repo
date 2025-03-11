@@ -44,7 +44,7 @@ DESCRIPTION
   clone the application repo to your local filesystem
 ```
 
-_See code: [src/commands/repo/clone.ts](https://github.com/heroku/heroku-repo/blob/v1.0.14/src/commands/repo/clone.ts)_
+_See code: [src/commands/repo/clone.ts](https://github.com/heroku/heroku-repo/blob/v2.0.0/src/commands/repo/clone.ts)_
 
 ## `heroku repo:download [FILENAME]`
 
@@ -65,7 +65,7 @@ DESCRIPTION
   download the application repo as a tarball
 ```
 
-_See code: [src/commands/repo/download.ts](https://github.com/heroku/heroku-repo/blob/v1.0.14/src/commands/repo/download.ts)_
+_See code: [src/commands/repo/download.ts](https://github.com/heroku/heroku-repo/blob/v2.0.0/src/commands/repo/download.ts)_
 
 ## `heroku repo:gc`
 
@@ -83,7 +83,7 @@ DESCRIPTION
   run a git gc --aggressive on an application's repository
 ```
 
-_See code: [src/commands/repo/gc.ts](https://github.com/heroku/heroku-repo/blob/v1.0.14/src/commands/repo/gc.ts)_
+_See code: [src/commands/repo/gc.ts](https://github.com/heroku/heroku-repo/blob/v2.0.0/src/commands/repo/gc.ts)_
 
 ## `heroku repo:purge_cache`
 
@@ -123,7 +123,7 @@ ALIASES
   $ heroku repo:purge_cache
 ```
 
-_See code: [src/commands/repo/purge-cache.ts](https://github.com/heroku/heroku-repo/blob/v1.0.14/src/commands/repo/purge-cache.ts)_
+_See code: [src/commands/repo/purge-cache.ts](https://github.com/heroku/heroku-repo/blob/v2.0.0/src/commands/repo/purge-cache.ts)_
 
 ## `heroku repo:reset`
 
@@ -141,5 +141,5 @@ DESCRIPTION
   reset the repo
 ```
 
-_See code: [src/commands/repo/reset.ts](https://github.com/heroku/heroku-repo/blob/v1.0.14/src/commands/repo/reset.ts)_
+_See code: [src/commands/repo/reset.ts](https://github.com/heroku/heroku-repo/blob/v2.0.0/src/commands/repo/reset.ts)_
 <!-- commandsstop -->
