@@ -55,7 +55,7 @@ USAGE
   $ heroku repo:download [FILENAME] -a <value> [-r <value>]
 
 ARGUMENTS
-  FILENAME  a filename for the tarball
+  [FILENAME]  a filename for the tarball
 
 FLAGS
   -a, --app=<value>     (required) app to run command against
