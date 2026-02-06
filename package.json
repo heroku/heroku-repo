@@ -32,7 +32,7 @@
     "chai": "^6.2.1",
     "eslint": "^7",
     "eslint-config-oclif": "^4",
-    "eslint-config-oclif-typescript": "^1",
+    "eslint-config-oclif-typescript": "^3",
     "eslint-import-resolver-typescript": "^3",
     "eslint-plugin-import": "^2",
     "eslint-plugin-mocha": "^10.5.0",
