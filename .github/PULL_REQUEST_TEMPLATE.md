@@ -23,16 +23,11 @@ Learn more about [Conventional Commits](https://www.conventionalcommits.org/).
 
 ### Patch Updates (patch semver update)
 - [ ] **fix**: Bug fix
-- [ ] **perf**: Performance improvement
 - [ ] **deps**: Dependency upgrade
 - [ ] **revert**: Revert a previous commit
-- [ ] **docs**: Documentation change
-- [ ] **style**: Styling update
 - [ ] **chore**: Change that does not affect production code
 - [ ] **refactor**: Refactoring existing code without changing behavior
-- [ ] **tests**: Add/update/remove tests
-- [ ] **build**: Change to the build system
-- [ ] **ci**: Continuous integration workflow update
+- [ ] **test**: Add/update/remove tests
 
 ## Testing
 **Notes**: 
