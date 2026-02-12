@@ -16,12 +16,14 @@ jobs:
   validate:
     runs-on: pub-hk-ubuntu-24.04-ip  # Options: ubuntu-latest | sfdc-hk-ubuntu-latest | pub-hk-ubuntu-24.04-ip
     steps:
+      # owner scopes the token to the org installation so it can access other repos (e.g. private npm-release-workflows)
       - name: Generate GitHub App token
         id: app-token
         uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ vars.DEV_TOOLS_RELEASE_WORKFLOW_APP_ID }}
           private-key: ${{ secrets.DEV_TOOLS_RELEASE_WORKFLOW_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
 
       - uses: actions/checkout@v6
 
@@ -57,12 +59,14 @@ jobs:
       no_release_needed: ${{ steps.release-workflow.outputs.no_release_needed }}
       pr_already_exists: ${{ steps.release-workflow.outputs.pr_already_exists }}
     steps:
+      # owner scopes the token to the org installation so it can access other repos (e.g. private npm-release-workflows)
       - name: Generate GitHub App token
         id: app-token
         uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ vars.DEV_TOOLS_RELEASE_WORKFLOW_APP_ID }}
           private-key: ${{ secrets.DEV_TOOLS_RELEASE_WORKFLOW_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
 
       - uses: actions/checkout@v6
 
@@ -92,12 +96,14 @@ jobs:
       pull-requests: write
       id-token: write
     steps:
+      # owner scopes the token to the org installation so it can access other repos (e.g. private npm-release-workflows)
       - name: Generate GitHub App token
         id: app-token
         uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ vars.DEV_TOOLS_RELEASE_WORKFLOW_APP_ID }}
           private-key: ${{ secrets.DEV_TOOLS_RELEASE_WORKFLOW_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
 
       - uses: actions/checkout@v6
 
