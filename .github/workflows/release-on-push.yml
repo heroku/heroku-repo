@@ -11,10 +11,11 @@ on:
       # - alpha  # Uncomment if you have an alpha channel
 
 jobs:
-  generate-token:
+  create-release:
     runs-on: pub-hk-ubuntu-24.04-ip  # Options: ubuntu-latest | sfdc-hk-ubuntu-latest | pub-hk-ubuntu-24.04-ip
-    outputs:
-      token: ${{ steps.app-token.outputs.token }}
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Generate GitHub App token
         id: app-token
@@ -23,20 +24,13 @@ jobs:
           app-id: ${{ vars.DEV_TOOLS_RELEASE_WORKFLOW_APP_ID }}
           private-key: ${{ secrets.DEV_TOOLS_RELEASE_WORKFLOW_APP_PRIVATE_KEY }}
 
-  create-release:
-    needs: generate-token
-    runs-on: pub-hk-ubuntu-24.04-ip  # Options: ubuntu-latest | sfdc-hk-ubuntu-latest | pub-hk-ubuntu-24.04-ip
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
       - uses: actions/checkout@v6
 
       - name: Checkout workflows repository
         uses: actions/checkout@v6
         with:
           repository: heroku/npm-release-workflows
-          token: ${{ needs.generate-token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token }}
           path: workflows-repo
           ref: main
 
@@ -45,4 +39,4 @@ jobs:
         with:
           package-manager: yarn  # npm | yarn | pnpm
           branch_name: ${{ github.ref_name }}
-          token: ${{ needs.generate-token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token }}

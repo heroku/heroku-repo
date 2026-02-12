@@ -13,10 +13,8 @@ on:
         required: false
 
 jobs:
-  generate-token:
+  validate:
     runs-on: pub-hk-ubuntu-24.04-ip  # Options: ubuntu-latest | sfdc-hk-ubuntu-latest | pub-hk-ubuntu-24.04-ip
-    outputs:
-      token: ${{ steps.app-token.outputs.token }}
     steps:
       - name: Generate GitHub App token
         id: app-token
@@ -25,17 +23,13 @@ jobs:
           app-id: ${{ vars.DEV_TOOLS_RELEASE_WORKFLOW_APP_ID }}
           private-key: ${{ secrets.DEV_TOOLS_RELEASE_WORKFLOW_APP_PRIVATE_KEY }}
 
-  validate:
-    needs: generate-token
-    runs-on: pub-hk-ubuntu-24.04-ip  # Options: ubuntu-latest | sfdc-hk-ubuntu-latest | pub-hk-ubuntu-24.04-ip
-    steps:
       - uses: actions/checkout@v6
 
       - name: Checkout workflows repository
         uses: actions/checkout@v6
         with:
           repository: heroku/npm-release-workflows
-          token: ${{ needs.generate-token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token }}
           path: workflows-repo
           ref: main
 
@@ -47,7 +41,7 @@ jobs:
           test_command: 'run test'
 
   release-please-pr:
-    needs: [generate-token, validate]
+    needs: validate
     runs-on: pub-hk-ubuntu-24.04-ip  # Options: ubuntu-latest | sfdc-hk-ubuntu-latest | pub-hk-ubuntu-24.04-ip
     permissions:
       contents: write
@@ -63,13 +57,20 @@ jobs:
       no_release_needed: ${{ steps.release-workflow.outputs.no_release_needed }}
       pr_already_exists: ${{ steps.release-workflow.outputs.pr_already_exists }}
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.DEV_TOOLS_RELEASE_WORKFLOW_APP_ID }}
+          private-key: ${{ secrets.DEV_TOOLS_RELEASE_WORKFLOW_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v6
 
       - name: Checkout workflows repository
         uses: actions/checkout@v6
         with:
           repository: heroku/npm-release-workflows
-          token: ${{ needs.generate-token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token }}
           path: workflows-repo
           ref: main
 
@@ -80,10 +81,10 @@ jobs:
           package-manager: yarn  # npm | yarn | pnpm
           branch_name: ${{ github.ref_name }}
           dry_run: ${{ inputs.dry_run }}
-          token: ${{ needs.generate-token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token }}
 
   publish:
-    needs: [generate-token, release-please-pr]
+    needs: release-please-pr
     if: needs.release-please-pr.result == 'success' && (needs.release-please-pr.outputs.pr_number != '' || needs.release-please-pr.outputs.pr_already_exists == 'true')
     runs-on: pub-hk-ubuntu-24.04-ip  # Options: ubuntu-latest | sfdc-hk-ubuntu-latest | pub-hk-ubuntu-24.04-ip
     permissions:
@@ -91,13 +92,20 @@ jobs:
       pull-requests: write
       id-token: write
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.DEV_TOOLS_RELEASE_WORKFLOW_APP_ID }}
+          private-key: ${{ secrets.DEV_TOOLS_RELEASE_WORKFLOW_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v6
 
       - name: Checkout workflows repository
         uses: actions/checkout@v6
         with:
           repository: heroku/npm-release-workflows
-          token: ${{ needs.generate-token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token }}
           path: workflows-repo
           ref: main
 
@@ -105,7 +113,7 @@ jobs:
         uses: ./workflows-repo/.github/actions/release-publish-public
         with:
           package-manager: yarn  # npm | yarn | pnpm
-          workflows_token: ${{ needs.generate-token.outputs.token }}
+          workflows_token: ${{ steps.app-token.outputs.token }}
           build_command: 'run build'
           dry_run: ${{ inputs.dry_run }}
           npm_tag: ${{ needs.release-please-pr.outputs.npm_tag }}
