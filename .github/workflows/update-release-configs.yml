@@ -1,0 +1,34 @@
+name: Update Release Configs
+
+# Generates release-please config files from release-channels.yml
+# Uses vars.DEV_TOOLS_RELEASE_WORKFLOW_APP_ID and secrets.DEV_TOOLS_RELEASE_WORKFLOW_APP_PRIVATE_KEY
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-configs:
+    runs-on: pub-hk-ubuntu-24.04-ip  # Options: ubuntu-latest | sfdc-hk-ubuntu-latest | pub-hk-ubuntu-24.04-ip
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.DEV_TOOLS_RELEASE_WORKFLOW_APP_ID }}
+          private-key: ${{ secrets.DEV_TOOLS_RELEASE_WORKFLOW_APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v6
+
+      - name: Checkout workflows repository
+        uses: actions/checkout@v6
+        with:
+          repository: heroku/npm-release-workflows
+          token: ${{ steps.app-token.outputs.token }}
+          path: workflows-repo
+          ref: main
+
+      - name: Update release configs
+        uses: ./workflows-repo/.github/actions/update-release-configs-job-public
