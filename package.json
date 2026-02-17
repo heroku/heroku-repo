@@ -11,7 +11,7 @@
     "@heroku-cli/command": "^11.4.0",
     "@heroku-cli/notifications": "^1.2.5",
     "@heroku/http-call": "^5.4.0",
-    "@oclif/core": "^2.16.0",
+    "@oclif/core": "^4.8.0",
     "bytes": "3.0.0",
     "debug": "^4.4.0",
     "smooth-progress": "1.1.0"
