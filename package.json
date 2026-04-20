@@ -31,10 +31,10 @@
     "eslint": "^9",
     "eslint-config-oclif": "^6.0.144",
     "eslint-plugin-mocha": "^11.2.0",
-    "mocha": "^11",
+    "mocha": "^11.7.5",
     "nock": "^14.0.0",
     "nyc": "^17.1.0",
-    "oclif": "^4.22.81",
+    "oclif": "^4.22.87",
     "proxyquire": "^2.1.0",
     "sinon": "^19.0.2",
     "stdout-stderr": "^0.1.13",
@@ -80,6 +80,6 @@
     "version": "oclif readme && git add README.md"
   },
   "resolutions": {
-    "serialize-javascript": "^7.0.3"
+    "serialize-javascript": "^7.0.5"
   }
 }
