@@ -4,3 +4,5 @@ node_modules
 dist/
 oclif.manifest.json
 .nyc_output
+coverage/
+.agents/artifacts/

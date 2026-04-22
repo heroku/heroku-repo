@@ -1,7 +1,13 @@
 import {Command, flags} from '@heroku-cli/command'
+import {ux} from '@oclif/core'
+import * as path from 'path'
+import * as os from 'os'
+import * as tar from 'tar'
 
-import Dyno from '../../lib/dyno'
+import {download} from '../../lib/download'
+import {upload} from '../../lib/upload'
 import {getURL, putURL} from '../../lib/repo'
+import {execSyncHelper, mkdtempSync, mkdirSync, existsSync, rmSync} from '../../lib/file-helper'
 
 export default class Gc extends Command {
   static description = 'run a git gc --aggressive on an application\'s repository'
@@ -13,26 +19,53 @@ export default class Gc extends Command {
   async run() {
     const {flags} = await this.parse(Gc)
     const {app} = flags
+
+    // Check if git is installed locally
+    try {
+      execSyncHelper('git --version', {stdio: 'ignore'})
+    } catch {
+      this.error('Git is not installed on your system. Please install git and try again.')
+    }
+
     const repoGetURL = await getURL(app as string, this.heroku)
     const repoPutURL = await putURL(app as string, this.heroku)
 
-    const command = `set -e
-mkdir -p tmp/repo_tmp/unpack
-cd tmp/repo_tmp
-curl -fo repo.tgz '${repoGetURL}'
-cd unpack
-tar -zxf ../repo.tgz
-git gc --aggressive
-tar -zcf ../repack.tgz .
-curl -fo /dev/null --upload-file ../repack.tgz '${repoPutURL}'
-exit`
+    // Create temporary directory
+    const tmpDir = mkdtempSync(path.join(os.tmpdir(), 'heroku-repo-gc-'))
+    const repoTgz = path.join(tmpDir, 'repo.tgz')
+    const unpackDir = path.join(tmpDir, 'unpack')
+    const repackTgz = path.join(tmpDir, 'repack.tgz')
 
-    const dyno = new Dyno({
-      app: app as string,
-      attach: true,
-      command,
-      heroku: this.heroku,
-    })
-    await dyno.start()
+    try {
+      ux.log('Downloading repository')
+      await download(repoGetURL, repoTgz, {progress: true})
+
+      ux.action.start('Unpacking repository')
+      mkdirSync(unpackDir, {recursive: true})
+      await tar.extract({
+        file: repoTgz,
+        cwd: unpackDir,
+      })
+      ux.action.stop()
+
+      ux.log('Running git gc --aggressive')
+      execSyncHelper('git gc --aggressive', {cwd: unpackDir, stdio: 'inherit'})
+
+      ux.action.start('Repacking repository')
+      await tar.create({
+        gzip: true,
+        file: repackTgz,
+        cwd: unpackDir,
+      }, ['.'])
+      ux.action.stop()
+
+      ux.log('Uploading repacked repository')
+      await upload(repoPutURL, repackTgz, {progress: true})
+    } finally {
+      // Cleanup temporary directory
+      if (existsSync(tmpDir)) {
+        rmSync(tmpDir, {recursive: true, force: true})
+      }
+    }
   }
 }
