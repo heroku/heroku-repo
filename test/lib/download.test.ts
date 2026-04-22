@@ -1,15 +1,14 @@
 import {expect} from 'chai'
 import {EventEmitter} from 'events'
-import {IncomingMessage} from 'http'
+import {ClientRequest, IncomingMessage} from 'http'
 import * as https from 'https'
 import {WriteStream} from 'node:fs'
+import proxyquire from 'proxyquire'
 import sinon from 'sinon'
 
 import * as fs from '../../src/lib/file-helper'
 
-const proxyquire = require('proxyquire').noCallThru()
-
-describe('Download Module', () => {
+describe('Download Module', function () {
   let httpsStub: sinon.SinonStubbedInstance<typeof https>
   let progressStub: sinon.SinonStub
   let writeStreamStub: sinon.SinonStub
@@ -18,40 +17,46 @@ describe('Download Module', () => {
   const testURL = 'https://example.com'
   const testPath = '/test/path/file.txt'
 
-  beforeEach(() => {
-    progressStub = sinon.stub()
-    writeStreamStub = sinon.stub(fs, 'createWriteStream').returns(<WriteStream>responseStub)
+  beforeEach(async function () {
+    progressStub = sinon.stub().callsFake(() => {
+      return {
+        tick: sinon.stub(),
+      }
+    })
+    writeStreamStub = sinon.stub(fs, 'createWriteStream')
 
     responseStub = Object.assign(new EventEmitter(), {
       headers: {'content-length': '1024'},
-      on: sinon.stub().callsFake((event: string, callback: () => void) => {
+      on: sinon.stub().callsFake((event: string, callback: (data?: string) => void) => {
         if (event === 'data') {
-          callback()
+          callback('')
         }
 
-        if (event === 'close') {
+        if (event === 'finish') {
           callback()
         }
       }),
+      pipe: sinon.stub(),
     })
 
     httpsStub = {
-      get: sinon.stub().callsFake((url: string, callback: (res: IncomingMessage) => void) => {
+      get: sinon.stub().callsFake((_url: string, callback: (res: IncomingMessage) => void) => {
         callback(responseStub as IncomingMessage)
-        return responseStub
+        return responseStub as ClientRequest
       }),
-    } as any
+    } as sinon.SinonStubbedInstance<typeof https>
   })
 
-  afterEach(() => {
+  afterEach(function () {
     sinon.restore()
   })
 
-  describe('download function', () => {
-    it('should create write stream with correct path', async () => {
+  describe('download function', function () {
+    it('should create write stream with correct path', async function () {
       const downloadWithMocks = proxyquire('../../src/lib/download', {
         https: httpsStub,
       }).download
+      writeStreamStub.returns(responseStub as WriteStream)
 
       await downloadWithMocks(testURL, testPath, {progress: false})
 
@@ -59,14 +64,15 @@ describe('Download Module', () => {
     })
   })
 
-  describe('showProgress function', () => {
-    it('should initialize progress bar with correct options', async () => {
+  describe('showProgress function', function () {
+    it('should initialize progress bar with correct options', async function () {
       const downloadWithMocks = proxyquire('../../src/lib/download', {
         https: httpsStub,
         'smooth-progress': progressStub,
       }).download
+      writeStreamStub.returns(responseStub as WriteStream)
 
-      await downloadWithMocks('https://example.com', '/test/path', {progress: true})
+      await downloadWithMocks(testURL, testPath, {progress: true})
 
       expect(progressStub.calledWith({
         tmpl: 'Downloading... :bar :percent :eta :data',

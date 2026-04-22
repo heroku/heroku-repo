@@ -1,6 +1,5 @@
 import https from 'https'
 import {IncomingMessage} from 'node:http'
-import {pipeline} from 'node:stream/promises'
 
 import {createWriteStream} from './file-helper'
 
@@ -20,10 +19,26 @@ function showProgress(rsp: IncomingMessage) {
   })
 }
 
-export function download(url: string, path: string, opts: {progress: boolean}) {
-  const file = createWriteStream(path)
-  https.get(url, async (rsp: IncomingMessage) => {
-    if (opts.progress) showProgress(rsp)
-    await pipeline(rsp, file)
+export async function download(url: string, path: string, opts: {progress: boolean}) {
+  const fileStream = createWriteStream(path)
+
+  return new Promise<void>((resolve, reject) => {
+    const req = https.get(url, (rsp: IncomingMessage) => {
+      if (opts.progress) {
+        showProgress(rsp)
+      }
+
+      rsp.on('error', (err: Error) => {
+        reject(err)
+      })
+
+      rsp.pipe(fileStream)
+    })
+
+    req.on('error', reject)
+    fileStream.on('error', reject)
+    fileStream.on('finish', () => {
+      resolve()
+    })
   })
 }
