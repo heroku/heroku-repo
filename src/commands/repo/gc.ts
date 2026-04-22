@@ -1,6 +1,6 @@
 import {Command, flags} from '@heroku-cli/command'
 import {ux} from '@oclif/core'
-import * as path from 'path'
+import path from 'path'
 import * as os from 'os'
 import * as tar from 'tar'
 

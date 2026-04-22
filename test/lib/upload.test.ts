@@ -29,7 +29,7 @@ describe('Upload Module', function () {
     statSyncStub = sinon.stub().returns({size: testFileSize})
 
     readStreamStub = Object.assign(new EventEmitter(), {
-      on: sinon.stub().callsFake(function (this: any, event: string, callback: (data?: string | Buffer) => void) {
+      on: sinon.stub().callsFake(function (this: any, event: string, callback: (data?: Buffer | string) => void) {
         this.listeners = this.listeners || {}
         this.listeners[event] = callback
         if (event === 'data') {

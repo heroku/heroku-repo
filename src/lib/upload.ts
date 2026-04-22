@@ -12,7 +12,7 @@ function showProgress(stats: {size: number}) {
     width: 25,
   })
   let total = 0
-  return (chunk: string | Buffer) => {
+  return (chunk: Buffer | string) => {
     const length = typeof chunk === 'string' ? chunk.length : chunk.length
     total += length
     bar.tick(length, {data: bytes(total)})

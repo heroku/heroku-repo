@@ -18,8 +18,8 @@ describe('repo:gc', function () {
   let existsSyncStub: sinon.SinonStub
   let rmSyncStub: sinon.SinonStub
   let tarStub: {
-    extract: sinon.SinonStub,
     create: sinon.SinonStub,
+    extract: sinon.SinonStub,
   }
   let Cmd: any
 
