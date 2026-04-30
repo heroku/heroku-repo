@@ -5,31 +5,32 @@ import nock from 'nock'
 
 import {getCacheURL, getURL, putCacheURL, putURL} from '../../src/lib/repo'
 
-export const getConfig = async () => {
+const getConfig = async () => {
   const pjsonPath = require.resolve('../../package.json')
   const conf = new Config({root: pjsonPath})
   await conf.load()
   return conf
 }
 
-export const getHerokuAPI = async () => {
+const getHerokuAPI = async () => {
   const conf = await getConfig()
   return new APIClient(conf)
 }
 
-const metadataResponse = {
-  app: {
-    id: '123',
-    name: 'myapp',
-  },
-  cache_delete_url: 'https://cache-delete-url.com',
-  cache_get_url: 'https://cache-get-url.com',
-  cache_put_url: 'https://cache-put-url.com',
-  repo_delete_url: 'https://repo-delete-url.com',
-  repo_get_url: 'https://repo-get-url.com',
-  repo_put_url: 'https://repo-put-url.com',
-}
 describe('repo helper commands', function () {
+  const metadataResponse = {
+    app: {
+      id: '123',
+      name: 'myapp',
+    },
+    cache_delete_url: 'https://cache-delete-url.com',
+    cache_get_url: 'https://cache-get-url.com',
+    cache_put_url: 'https://cache-put-url.com',
+    repo_delete_url: 'https://repo-delete-url.com',
+    repo_get_url: 'https://repo-get-url.com',
+    repo_put_url: 'https://repo-put-url.com',
+  }
+
   let api: nock.Scope
   let herokuAPI: APIClient
 
