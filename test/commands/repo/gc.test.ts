@@ -103,7 +103,7 @@ describe('repo:gc', function () {
         await runCommand(Cmd, ['--app', 'myapp'])
         expect.fail('Should have thrown an error')
       } catch (error: any) {
-        expect(error.message).to.contain('Git is not installed on your system')
+        expect(error.message).to.contain('You don\'t have Git installed on your system. Install Git and try again.')
       }
 
       // Verify no download/upload happened

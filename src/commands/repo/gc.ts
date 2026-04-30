@@ -24,7 +24,7 @@ export default class Gc extends Command {
     try {
       execSyncHelper('git --version', {stdio: 'ignore'})
     } catch {
-      this.error('Git is not installed on your system. Please install git and try again.')
+      this.error('You don\'t have Git installed on your system. Install Git and try again.')
     }
 
     const repoGetURL = await getURL(app as string, this.heroku)
