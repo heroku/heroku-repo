@@ -7,6 +7,7 @@ export default [
       './dist',
       './lib',
       '**/*.js',
+      './workflows-repo',
     ],
   },
   {
