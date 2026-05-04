@@ -1,7 +1,7 @@
 {
   "name": "@heroku-cli/plugin-heroku-repo",
   "description": "Heroku CLI plugin to manipulate the repo",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "Heroku",
   "bugs": {
     "url": "https://github.com/heroku/heroku-repo/issues"
