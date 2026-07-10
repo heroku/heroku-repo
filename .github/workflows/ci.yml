@@ -18,7 +18,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: npm
       - run: npm ci
-      - name: unit tests
+      - name: unit tests & linting
         run: npm test
-      - name: linting
-        run: npm run lint

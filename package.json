@@ -21,7 +21,6 @@
   "devDependencies": {
     "@heroku-cli/schema": "^2.0.0",
     "@heroku-cli/test-utils": "^0.2.0",
-    "@oclif/plugin-help": "^5",
     "@types/bytes": "^3.1.4",
     "@types/debug": "^4.1.12",
     "@types/node": "^22.15.3",
@@ -64,11 +63,11 @@
     "url": "https://github.com/heroku/heroku-repo.git"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc -b",
+    "build": "rm -rf dist && tsc -b && oclif manifest && oclif readme",
     "lint": "eslint .",
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "npm run lint",
-    "prepack": "npm run build && oclif manifest && oclif readme",
+    "prepack": "npm run build",
     "test": "vitest run --coverage",
     "version": "oclif readme && git add README.md"
   },
