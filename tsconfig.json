@@ -2,16 +2,18 @@
   "compilerOptions": {
     "declaration": true,
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "module": "CommonJS",
-    "outDir": "dist",
-    "strict": true,
-    "target": "ESNext",
-    "skipLibCheck": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",
+    "pretty": true,
     "rootDirs": [
       "./src"
     ],
-    "allowSyntheticDefaultImports": true
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022"
   },
   "include": [
     "./src/**/*"
