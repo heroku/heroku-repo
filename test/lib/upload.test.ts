@@ -1,104 +1,97 @@
-import {expect} from 'chai'
-import {EventEmitter} from 'events'
-import {ClientRequest, IncomingMessage} from 'http'
-import * as https from 'https'
-import {ReadStream} from 'node:fs'
-import sinon from 'sinon'
-import proxyquire from 'proxyquire'
+import type * as https from 'node:https'
 
-describe('Upload Module', function () {
-  let httpsStub: sinon.SinonStubbedInstance<typeof https>
-  let progressStub: sinon.SinonStub
-  let statSyncStub: sinon.SinonStub
-  let createReadStreamStub: sinon.SinonStub
-  let readStreamStub: EventEmitter
-  let requestStub: EventEmitter
-  let responseStub: EventEmitter
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest'
 
-  const testURL = 'https://example.com/upload?token=abc123'
-  const testPath = '/test/path/file.txt'
-  const testFileSize = 2048
+const httpsRequestMock = vi.fn()
+const statSyncMock = vi.fn()
+const createReadStreamMock = vi.fn()
+const progressMock = vi.fn()
+const tickMock = vi.fn()
 
-  beforeEach(async function () {
-    progressStub = sinon.stub().callsFake(() => {
-      return {
-        tick: sinon.stub(),
-      }
+vi.mock('node:https', async importOriginal => {
+  const actual = await importOriginal<typeof import('node:https')>()
+  return {
+    ...actual,
+    default: {...actual.default, request: httpsRequestMock},
+    request: httpsRequestMock,
+  }
+})
+
+vi.mock('node:fs', async importOriginal => {
+  const actual = await importOriginal<typeof import('node:fs')>()
+  return {
+    ...actual,
+    createReadStream: createReadStreamMock,
+    statSync: statSyncMock,
+  }
+})
+
+vi.mock('smooth-progress', () => ({
+  default: progressMock,
+}))
+
+const {upload} = await import('../../src/lib/upload.js')
+
+const testURL = 'https://example.com/upload?token=abc123'
+const testPath = '/test/path/file.txt'
+const testFileSize = 2048
+
+// Fake read stream that captures listeners and fires 'end' when piped so upload resolves.
+function fakeReadStream() {
+  const listeners: Record<string, (chunk?: Buffer | string) => void> = {}
+  return {
+    on(event: string, cb: (chunk?: Buffer | string) => void) {
+      listeners[event] = cb
+      if (event === 'data') cb(Buffer.from('test'))
+      return this
+    },
+    pipe() {
+      listeners.end?.()
+      return this
+    },
+  }
+}
+
+describe('Upload Module', () => {
+  beforeEach(() => {
+    httpsRequestMock.mockReset()
+    statSyncMock.mockReset()
+    createReadStreamMock.mockReset()
+    progressMock.mockReset()
+    tickMock.mockReset()
+    progressMock.mockReturnValue({tick: tickMock})
+    statSyncMock.mockReturnValue({size: testFileSize})
+    createReadStreamMock.mockReturnValue(fakeReadStream())
+
+    httpsRequestMock.mockImplementation((_options: https.RequestOptions, callback: (res: unknown) => void) => {
+      callback({statusCode: 200})
+      return {on: vi.fn()}
     })
-
-    statSyncStub = sinon.stub().returns({size: testFileSize})
-
-    readStreamStub = Object.assign(new EventEmitter(), {
-      on: sinon.stub().callsFake(function (this: any, event: string, callback: (data?: Buffer | string) => void) {
-        this.listeners = this.listeners || {}
-        this.listeners[event] = callback
-        if (event === 'data') {
-          // Simulate data chunk
-          callback(Buffer.from('test'))
-        }
-
-        return this
-      }),
-      pipe: sinon.stub().callsFake(function (this: any) {
-        // Simulate successful pipe
-        if (this.listeners && this.listeners.end) {
-          this.listeners.end()
-        }
-
-        return this
-      }),
-    })
-
-    requestStub = Object.assign(new EventEmitter(), {
-      on: sinon.stub().returnsThis(),
-    })
-
-    responseStub = Object.assign(new EventEmitter(), {
-      statusCode: 200,
-    })
-
-    createReadStreamStub = sinon.stub().returns(readStreamStub as ReadStream)
-
-    httpsStub = {
-      request: sinon.stub().callsFake((_options: https.RequestOptions, callback: (res: IncomingMessage) => void) => {
-        callback(responseStub as IncomingMessage)
-        return requestStub as ClientRequest
-      }),
-    } as sinon.SinonStubbedInstance<typeof https>
   })
 
-  afterEach(function () {
-    sinon.restore()
+  afterEach(() => {
+    vi.clearAllMocks()
   })
 
-  describe('upload function', function () {
-    it('creates a read stream with correct path', async function () {
-      const uploadWithMocks = proxyquire('../../src/lib/upload', {
-        https: httpsStub,
-        fs: {
-          statSync: statSyncStub,
-          createReadStream: createReadStreamStub,
-        },
-      }).upload
+  describe('upload function', () => {
+    it('creates a read stream with correct path', async () => {
+      await upload(testURL, testPath, {progress: false})
 
-      await uploadWithMocks(testURL, testPath, {progress: false})
-
-      expect(createReadStreamStub.calledWith(testPath)).to.equal(true)
+      expect(createReadStreamMock).toHaveBeenCalledWith(testPath)
     })
 
-    it('makes a PUT request with correct options', async function () {
-      const uploadWithMocks = proxyquire('../../src/lib/upload', {
-        https: httpsStub,
-        fs: {
-          statSync: statSyncStub,
-          createReadStream: createReadStreamStub,
-        },
-      }).upload
+    it('makes a PUT request with correct options', async () => {
+      await upload(testURL, testPath, {progress: false})
 
-      await uploadWithMocks(testURL, testPath, {progress: false})
-
-      expect(httpsStub.request.calledOnce).to.equal(true)
-      const callArgs = httpsStub.request.firstCall.args[0] as https.RequestOptions
+      expect(httpsRequestMock).toHaveBeenCalledOnce()
+      const callArgs = httpsRequestMock.mock.calls[0][0] as https.RequestOptions
       expect(callArgs.method).to.equal('PUT')
       expect(callArgs.hostname).to.equal('example.com')
       expect(callArgs.path).to.equal('/upload?token=abc123')
@@ -106,39 +99,21 @@ describe('Upload Module', function () {
     })
   })
 
-  describe('showProgress function', function () {
-    it('initializes the progress bar with correct options', async function () {
-      const uploadWithMocks = proxyquire('../../src/lib/upload', {
-        https: httpsStub,
-        'smooth-progress': progressStub,
-        fs: {
-          statSync: statSyncStub,
-          createReadStream: createReadStreamStub,
-        },
-      }).upload
+  describe('showProgress function', () => {
+    it('initializes the progress bar with correct options', async () => {
+      await upload(testURL, testPath, {progress: true})
 
-      await uploadWithMocks(testURL, testPath, {progress: true})
-
-      expect(progressStub.calledWith({
+      expect(progressMock).toHaveBeenCalledWith({
         tmpl: 'Uploading... :bar :percent :eta :data',
         total: testFileSize,
         width: 25,
-      })).to.equal(true)
+      })
     })
 
-    it('doesn\'t show progress when progress option is false', async function () {
-      const uploadWithMocks = proxyquire('../../src/lib/upload', {
-        https: httpsStub,
-        'smooth-progress': progressStub,
-        fs: {
-          statSync: statSyncStub,
-          createReadStream: createReadStreamStub,
-        },
-      }).upload
+    it('doesn\'t show progress when progress option is false', async () => {
+      await upload(testURL, testPath, {progress: false})
 
-      await uploadWithMocks(testURL, testPath, {progress: false})
-
-      expect(progressStub.called).to.equal(false)
+      expect(progressMock).not.toHaveBeenCalled()
     })
   })
 })

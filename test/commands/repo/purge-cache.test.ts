@@ -1,22 +1,30 @@
-import {expect} from 'chai'
-import * as sinon from 'sinon'
+import {runCommand} from '@heroku-cli/test-utils'
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest'
 
-import Cmd from '../../../src/commands/repo/purge-cache'
-import Dyno from '../../../src/lib/dyno'
-import * as repo from '../../../src/lib/repo'
-import {runCommand} from '../../run-command'
+import Dyno from '../../../src/lib/dyno.js'
 
-describe('repo:purge-cache', function () {
-  let getCacheURLStub: sinon.SinonStub
-  let putCacheURLStub: sinon.SinonStub
-  let dynoStub: sinon.SinonStub
-  let dynoOpts: {
-    app: string,
-    attach: boolean,
-    command: string,
+const getCacheURLMock = vi.fn()
+const putCacheURLMock = vi.fn()
+
+vi.mock('../../../src/lib/repo.js', async importOriginal => {
+  const actual = await importOriginal<typeof import('../../../src/lib/repo.js')>()
+  return {
+    ...actual,
+    getCacheURL: (...args: unknown[]) => getCacheURLMock(...args),
+    putCacheURL: (...args: unknown[]) => putCacheURLMock(...args),
   }
+})
 
-  const commandString = `set -e
+const Cmd = (await import('../../../src/commands/repo/purge-cache.js')).default
+
+const commandString = `set -e
 mkdir -p tmp/repo_tmp/unpack
 cd tmp/repo_tmp
 curl -fo repo-cache.tgz 'https://get-cache-url.com'
@@ -42,27 +50,30 @@ tar -zcf ../cache-repack.tgz .
 curl -fo /dev/null --upload-file ../cache-repack.tgz 'https://put-cache-url.com'
 exit`
 
-  beforeEach(function () {
-    getCacheURLStub = sinon.stub(repo, 'getCacheURL')
-    putCacheURLStub = sinon.stub(repo, 'putCacheURL')
-    dynoStub = sinon.stub(Dyno.prototype, 'start').callsFake(function () {
-      // @ts-expect-error
-      dynoOpts = this.opts
-      return Promise.resolve()
+describe('repo:purge-cache', () => {
+  let startSpy: ReturnType<typeof vi.spyOn>
+  let dynoOpts: {app: string, attach: boolean, command: string}
+
+  beforeEach(() => {
+    getCacheURLMock.mockReset()
+    putCacheURLMock.mockReset()
+    startSpy = vi.spyOn(Dyno.prototype, 'start').mockImplementation(async function (this: Dyno) {
+      dynoOpts = this.opts as typeof dynoOpts
     })
   })
 
-  afterEach(function () {
-    sinon.restore()
+  afterEach(() => {
+    startSpy.mockRestore()
+    vi.clearAllMocks()
   })
 
-  it('should create Dyno with correct configuration', async function () {
-    getCacheURLStub.returns(Promise.resolve('https://get-cache-url.com'))
-    putCacheURLStub.returns(Promise.resolve('https://put-cache-url.com'))
+  it('should create Dyno with correct configuration', async () => {
+    getCacheURLMock.mockResolvedValue('https://get-cache-url.com')
+    putCacheURLMock.mockResolvedValue('https://put-cache-url.com')
 
     await runCommand(Cmd, ['--app', 'myapp'])
 
-    expect(dynoStub.calledOnce).to.be.true
+    expect(startSpy).toHaveBeenCalledOnce()
     expect(dynoOpts.app).to.equal('myapp')
     expect(dynoOpts.attach).to.equal(true)
     expect(dynoOpts.command).to.equal(commandString)

@@ -1,84 +1,101 @@
-import {expect} from 'chai'
-import {EventEmitter} from 'events'
-import {ClientRequest, IncomingMessage} from 'http'
-import * as https from 'https'
-import {WriteStream} from 'node:fs'
-import proxyquire from 'proxyquire'
-import sinon from 'sinon'
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest'
 
-import * as fs from '../../src/lib/file-helper'
+const httpsGetMock = vi.fn()
+const createWriteStreamMock = vi.fn()
+const progressMock = vi.fn()
+const tickMock = vi.fn()
 
-describe('Download Module', function () {
-  let httpsStub: sinon.SinonStubbedInstance<typeof https>
-  let progressStub: sinon.SinonStub
-  let writeStreamStub: sinon.SinonStub
-  let responseStub: EventEmitter
+vi.mock('node:https', async importOriginal => {
+  const actual = await importOriginal<typeof import('node:https')>()
+  return {
+    ...actual,
+    default: {...actual.default, get: httpsGetMock},
+    get: httpsGetMock,
+  }
+})
 
-  const testURL = 'https://example.com'
-  const testPath = '/test/path/file.txt'
+vi.mock('../../src/lib/file-helper.js', async importOriginal => {
+  const actual = await importOriginal<typeof import('../../src/lib/file-helper.js')>()
+  return {
+    ...actual,
+    createWriteStream: createWriteStreamMock,
+  }
+})
 
-  beforeEach(async function () {
-    progressStub = sinon.stub().callsFake(() => {
-      return {
-        tick: sinon.stub(),
-      }
+vi.mock('smooth-progress', () => ({
+  default: progressMock,
+}))
+
+const {download} = await import('../../src/lib/download.js')
+
+const testURL = 'https://example.com'
+const testPath = '/test/path/file.txt'
+
+// Fake write stream whose 'finish' listener fires immediately so download resolves.
+function fakeFileStream() {
+  return {
+    on(event: string, cb: () => void) {
+      if (event === 'finish') cb()
+      return this
+    },
+  }
+}
+
+// Fake response that emits a single data chunk so the progress path runs.
+function fakeResponse() {
+  return {
+    headers: {'content-length': '1024'},
+    on(event: string, cb: (chunk: string) => void) {
+      if (event === 'data') cb('mock-chunk')
+      return this
+    },
+    pipe: vi.fn(),
+  }
+}
+
+describe('Download Module', () => {
+  beforeEach(() => {
+    httpsGetMock.mockReset()
+    createWriteStreamMock.mockReset()
+    progressMock.mockReset()
+    tickMock.mockReset()
+    progressMock.mockReturnValue({tick: tickMock})
+    createWriteStreamMock.mockReturnValue(fakeFileStream())
+
+    httpsGetMock.mockImplementation((_url: string, callback: (res: unknown) => void) => {
+      callback(fakeResponse())
+      return {on: vi.fn()}
     })
-    writeStreamStub = sinon.stub(fs, 'createWriteStream')
-
-    responseStub = Object.assign(new EventEmitter(), {
-      headers: {'content-length': '1024'},
-      on: sinon.stub().callsFake((event: string, callback: (data?: string) => void) => {
-        if (event === 'data') {
-          callback('')
-        }
-
-        if (event === 'finish') {
-          callback()
-        }
-      }),
-      pipe: sinon.stub(),
-    })
-
-    httpsStub = {
-      get: sinon.stub().callsFake((_url: string, callback: (res: IncomingMessage) => void) => {
-        callback(responseStub as IncomingMessage)
-        return responseStub as ClientRequest
-      }),
-    } as sinon.SinonStubbedInstance<typeof https>
   })
 
-  afterEach(function () {
-    sinon.restore()
+  afterEach(() => {
+    vi.clearAllMocks()
   })
 
-  describe('download function', function () {
-    it('should create write stream with correct path', async function () {
-      const downloadWithMocks = proxyquire('../../src/lib/download', {
-        https: httpsStub,
-      }).download
-      writeStreamStub.returns(responseStub as WriteStream)
+  describe('download function', () => {
+    it('should create write stream with correct path', async () => {
+      await download(testURL, testPath, {progress: false})
 
-      await downloadWithMocks(testURL, testPath, {progress: false})
-
-      expect(writeStreamStub.calledWith(testPath)).to.equal(true)
+      expect(createWriteStreamMock).toHaveBeenCalledWith(testPath)
     })
   })
 
-  describe('showProgress function', function () {
-    it('should initialize progress bar with correct options', async function () {
-      const downloadWithMocks = proxyquire('../../src/lib/download', {
-        https: httpsStub,
-        'smooth-progress': progressStub,
-      }).download
-      writeStreamStub.returns(responseStub as WriteStream)
+  describe('showProgress function', () => {
+    it('should initialize progress bar with correct options', async () => {
+      await download(testURL, testPath, {progress: true})
 
-      await downloadWithMocks(testURL, testPath, {progress: true})
-
-      expect(progressStub.calledWith({
+      expect(progressMock).toHaveBeenCalledWith({
         tmpl: 'Downloading... :bar :percent :eta :data',
         total: 1024,
         width: 25,
-      })).to.equal(true)
+      })
     })
   })
 })
