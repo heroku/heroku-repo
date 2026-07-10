@@ -1,13 +1,15 @@
 import {Command, flags} from '@heroku-cli/command'
-import {ux} from '@oclif/core'
-import path from 'path'
-import * as os from 'os'
+import {ux} from '@oclif/core/ux'
+import * as os from 'node:os'
+import path from 'node:path'
 import * as tar from 'tar'
 
-import {download} from '../../lib/download'
-import {upload} from '../../lib/upload'
-import {getURL, putURL} from '../../lib/repo'
-import {execSyncHelper, mkdtempSync, mkdirSync, existsSync, rmSync} from '../../lib/file-helper'
+import {download} from '../../lib/download.js'
+import {
+  execSyncHelper, existsSync, mkdirSync, mkdtempSync, rmSync,
+} from '../../lib/file-helper.js'
+import {getURL, putURL} from '../../lib/repo.js'
+import {upload} from '../../lib/upload.js'
 
 export default class Gc extends Command {
   static description = 'run a git gc --aggressive on an application\'s repository'
@@ -24,7 +26,7 @@ export default class Gc extends Command {
     try {
       execSyncHelper('git --version', {stdio: 'ignore'})
     } catch {
-      this.error('You don\'t have Git installed on your system. Install Git and try again.')
+      ux.error('You don\'t have Git installed on your system. Install Git and try again.')
     }
 
     const repoGetURL = await getURL(app as string, this.heroku)
@@ -37,34 +39,34 @@ export default class Gc extends Command {
     const repackTgz = path.join(tmpDir, 'repack.tgz')
 
     try {
-      ux.log('Downloading repository')
+      ux.stdout('Downloading repository')
       await download(repoGetURL, repoTgz, {progress: true})
 
       ux.action.start('Unpacking repository')
       mkdirSync(unpackDir, {recursive: true})
       await tar.extract({
-        file: repoTgz,
         cwd: unpackDir,
+        file: repoTgz,
       })
       ux.action.stop()
 
-      ux.log('Running git gc --aggressive')
+      ux.stdout('Running git gc --aggressive')
       execSyncHelper('git gc --aggressive', {cwd: unpackDir, stdio: 'inherit'})
 
       ux.action.start('Repacking repository')
       await tar.create({
-        gzip: true,
-        file: repackTgz,
         cwd: unpackDir,
+        file: repackTgz,
+        gzip: true,
       }, ['.'])
       ux.action.stop()
 
-      ux.log('Uploading repacked repository')
+      ux.stdout('Uploading repacked repository')
       await upload(repoPutURL, repackTgz, {progress: true})
     } finally {
       // Cleanup temporary directory
       if (existsSync(tmpDir)) {
-        rmSync(tmpDir, {recursive: true, force: true})
+        rmSync(tmpDir, {force: true, recursive: true})
       }
     }
   }

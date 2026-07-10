@@ -1,9 +1,8 @@
-import https from 'https'
-import {createReadStream, statSync} from 'fs'
+import bytes from 'bytes'
+import {createReadStream, statSync} from 'node:fs'
 import {IncomingMessage} from 'node:http'
-
-const bytes = require('bytes')
-const progress = require('smooth-progress')
+import https from 'node:https'
+import progress from 'smooth-progress'
 
 function showProgress(stats: {size: number}) {
   const bar = progress({
@@ -26,13 +25,13 @@ export async function upload(url: string, path: string, opts: {progress: boolean
 
   return new Promise<void>((resolve, reject) => {
     const options: https.RequestOptions = {
-      method: 'PUT',
-      hostname: urlObj.hostname,
-      port: urlObj.port,
-      path: urlObj.pathname + urlObj.search,
       headers: {
         'Content-Length': stats.size,
       },
+      hostname: urlObj.hostname,
+      method: 'PUT',
+      path: urlObj.pathname + urlObj.search,
+      port: urlObj.port,
     }
 
     const req = https.request(options, (rsp: IncomingMessage) => {

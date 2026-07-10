@@ -1,7 +1,7 @@
 import {Command, flags} from '@heroku-cli/command'
 
-import Dyno from '../../lib/dyno'
-import {getCacheURL, putCacheURL} from '../../lib/repo'
+import Dyno from '../../lib/dyno.js'
+import {getCacheURL, putCacheURL} from '../../lib/repo.js'
 
 export default class PurgeCache extends Command {
   static aliases = ['repo:purge_cache']

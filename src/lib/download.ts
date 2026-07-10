@@ -1,10 +1,9 @@
-import https from 'https'
+import bytes from 'bytes'
 import {IncomingMessage} from 'node:http'
+import https from 'node:https'
+import progress from 'smooth-progress'
 
-import {createWriteStream} from './file-helper'
-
-const bytes = require('bytes')
-const progress = require('smooth-progress')
+import {createWriteStream} from './file-helper.js'
 
 function showProgress(rsp: IncomingMessage) {
   const bar = progress({

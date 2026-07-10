@@ -1,9 +1,10 @@
-import {Command, flags} from '@heroku-cli/command'
-import * as Heroku from '@heroku-cli/schema'
-import {ux} from '@oclif/core'
+import type * as Heroku from '@heroku-cli/schema'
 
-import {execSyncHelper, existsSync, mkdirSync} from '../../lib/file-helper'
-import {getURL} from '../../lib/repo'
+import {Command, flags} from '@heroku-cli/command'
+import {ux} from '@oclif/core/ux'
+
+import {execSyncHelper, existsSync, mkdirSync} from '../../lib/file-helper.js'
+import {getURL} from '../../lib/repo.js'
 
 export default class Clone extends Command {
   static description = 'clone the application repo to your local filesystem'
@@ -26,29 +27,29 @@ export default class Clone extends Command {
     process.chdir(`${app}/.git`)
     execSyncHelper(
       `curl -f '${url}' | tar xzf -`,
-      {stdio: 'inherit'}
+      {stdio: 'inherit'},
     )
     process.chdir('..')
     execSyncHelper(
       'git init',
-      {stdio: 'inherit'}
+      {stdio: 'inherit'},
     )
 
     try {
       execSyncHelper(
         'git reset --hard main',
-        {stdio: 'inherit'}
+        {stdio: 'inherit'},
       )
     } catch {
       execSyncHelper(
         'git reset --hard master',
-        {stdio: 'inherit'}
+        {stdio: 'inherit'},
       )
     }
 
     execSyncHelper(
       `git remote add heroku ${info.git_url}`,
-      {stdio: 'inherit'}
+      {stdio: 'inherit'},
     )
   }
 }
