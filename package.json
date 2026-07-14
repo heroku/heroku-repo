@@ -30,7 +30,7 @@
     "eslint-config-oclif": "^6.0.144",
     "nock": "^14.0.0",
     "oclif": "^4.23.14",
-    "strip-ansi": "^6",
+    "strip-ansi": "^7",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
   },
