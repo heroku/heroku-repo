@@ -1,8 +1,11 @@
-node_modules
-.DS_Store
-.idea/
-dist/
-oclif.manifest.json
+*-debug.log
+*-error.log
+**/.DS_Store
+/.idea
+/dist
+/node_modules
+/tmp
 .nyc_output
-coverage/
+oclif.manifest.json
+coverage
 .agents/artifacts/

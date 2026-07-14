@@ -1,10 +1,29 @@
-import {expect} from 'chai'
+import {runCommand} from '@heroku-cli/test-utils'
 import nock from 'nock'
-import * as sinon from 'sinon'
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest'
 
-import Cmd from '../../../src/commands/repo/clone'
-import * as fs from '../../../src/lib/file-helper'
-import {runCommand} from '../../run-command'
+const existsSyncMock = vi.fn()
+const mkdirSyncMock = vi.fn()
+const execSyncHelperMock = vi.fn()
+
+vi.mock('../../../src/lib/file-helper.js', async importOriginal => {
+  const actual = await importOriginal<typeof import('../../../src/lib/file-helper.js')>()
+  return {
+    ...actual,
+    execSyncHelper: (...args: unknown[]) => execSyncHelperMock(...args),
+    existsSync: (...args: unknown[]) => existsSyncMock(...args),
+    mkdirSync: (...args: unknown[]) => mkdirSyncMock(...args),
+  }
+})
+
+const Cmd = (await import('../../../src/commands/repo/clone.js')).default
 
 const app = {
   build_stack: {name: 'cedar-14'},
@@ -37,64 +56,56 @@ const buildMetadata = {
   repo_put_url: 'https://repo-put.com',
 }
 
-describe('repo:clone', function () {
-  let api: nock.Scope
-  let existsSyncStub: sinon.SinonStub
-  let mkdirSyncStub: sinon.SinonStub
-  let chdirStub: sinon.SinonStub
-  let execSyncHelperStub: sinon.SinonStub
+describe('repo:clone', () => {
+  let chdirSpy: ReturnType<typeof vi.spyOn>
 
-  beforeEach(function () {
-    api = nock('https://api.heroku.com')
-    existsSyncStub = sinon.stub(fs, 'existsSync')
-    mkdirSyncStub = sinon.stub(fs, 'mkdirSync')
-    chdirStub = sinon.stub(process, 'chdir')
-    execSyncHelperStub = sinon.stub(fs, 'execSyncHelper')
+  beforeEach(() => {
+    existsSyncMock.mockReset()
+    mkdirSyncMock.mockReset()
+    execSyncHelperMock.mockReset()
+    chdirSpy = vi.spyOn(process, 'chdir').mockImplementation(() => {})
   })
 
-  afterEach(function () {
-    api.done()
+  afterEach(() => {
+    chdirSpy.mockRestore()
     nock.cleanAll()
-    sinon.restore()
   })
 
-  it('successfully clones a repository', async function () {
+  it('successfully clones a repository', async () => {
     nock('https://api.heroku.com')
-      .get('/apps/myapp/build-metadata')
-      .reply(200, buildMetadata)
-      .get('/apps/myapp')
-      .reply(200, app)
+    .get('/apps/myapp/build-metadata')
+    .reply(200, buildMetadata)
+    .get('/apps/myapp')
+    .reply(200, app)
 
-    existsSyncStub.withArgs('myapp').returns(false)
+    existsSyncMock.mockReturnValue(false)
 
     await runCommand(Cmd, [
       '--app',
       'myapp',
     ])
 
-    expect(existsSyncStub.called).to.equal(true)
-    expect(mkdirSyncStub.calledWith('myapp/.git')).to.equal(true)
-    expect(chdirStub.calledWith('myapp/.git')).to.equal(true)
-    expect(execSyncHelperStub.callCount).to.equal(4)
+    expect(existsSyncMock).toHaveBeenCalled()
+    expect(mkdirSyncMock).toHaveBeenCalledWith('myapp/.git', {recursive: true})
+    expect(chdirSpy).toHaveBeenCalledWith('myapp/.git')
+    expect(execSyncHelperMock).toHaveBeenCalledTimes(4)
   })
 
   it('should abort if app directory already exists', async () => {
     nock('https://api.heroku.com')
-      .get('/apps/myapp/build-metadata')
-      .reply(200, buildMetadata)
-      .get('/apps/myapp')
-      .reply(200, app)
+    .get('/apps/myapp/build-metadata')
+    .reply(200, buildMetadata)
+    .get('/apps/myapp')
+    .reply(200, app)
 
-    existsSyncStub.withArgs('myapp').returns(true)
+    existsSyncMock.mockReturnValue(true)
 
-    await runCommand(Cmd, [
+    const {error} = await runCommand(Cmd, [
       '--app',
       'myapp',
-    ]).catch(error => {
-      const {message} = error as { message: string }
-      expect(message).to.equal('myapp already exists in the filesystem. Aborting.')
-    })
+    ])
 
-    expect(mkdirSyncStub.called).to.be.false
+    expect(error?.message).to.equal('myapp already exists in the filesystem. Aborting.')
+    expect(mkdirSyncMock).not.toHaveBeenCalled()
   })
 })

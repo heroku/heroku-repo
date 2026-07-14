@@ -1,5 +1,5 @@
-import {ExecSyncOptions, execSync} from 'child_process'
-import * as fs from 'fs'
+import {execSync, ExecSyncOptions} from 'node:child_process'
+import * as fs from 'node:fs'
 
 export const existsSync = (path: string) => fs.existsSync(path)
 export const mkdirSync = (path: string, options: fs.MakeDirectoryOptions) => fs.mkdirSync(path, options)

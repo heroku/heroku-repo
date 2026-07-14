@@ -1,23 +1,23 @@
 import {APIClient} from '@heroku-cli/command'
 import {Config} from '@oclif/core'
-import {expect} from 'chai'
 import nock from 'nock'
+import {fileURLToPath} from 'node:url'
+import {
+  afterEach, beforeEach, describe, expect, it,
+} from 'vitest'
 
-import {getCacheURL, getURL, putCacheURL, putURL} from '../../src/lib/repo'
+import {
+  getCacheURL, getURL, putCacheURL, putURL,
+} from '../../src/lib/repo.js'
 
-const getConfig = async () => {
-  const pjsonPath = require.resolve('../../package.json')
-  const conf = new Config({root: pjsonPath})
-  await conf.load()
-  return conf
-}
+const root = fileURLToPath(new URL('../../', import.meta.url))
 
 const getHerokuAPI = async () => {
-  const conf = await getConfig()
-  return new APIClient(conf)
+  const config = await Config.load(root)
+  return new APIClient(config)
 }
 
-describe('repo helper commands', function () {
+describe('repo helper commands', () => {
   const metadataResponse = {
     app: {
       id: '123',
@@ -34,42 +34,42 @@ describe('repo helper commands', function () {
   let api: nock.Scope
   let herokuAPI: APIClient
 
-  beforeEach(async function () {
+  beforeEach(async () => {
     api = nock('https://api.heroku.com')
-      .get('/apps/myapp/build-metadata')
-      .reply(200, metadataResponse)
+    .get('/apps/myapp/build-metadata')
+    .reply(200, metadataResponse)
 
     herokuAPI = await getHerokuAPI()
   })
 
-  afterEach(function () {
+  afterEach(() => {
     api.done()
     nock.cleanAll()
   })
 
-  describe('getURL', function () {
-    it('should return the repo_get_url', async function () {
+  describe('getURL', () => {
+    it('should return the repo_get_url', async () => {
       const url = await getURL('myapp', herokuAPI)
       expect(url).to.equal('https://repo-get-url.com')
     })
   })
 
-  describe('putURL', function () {
-    it('should return the repo_put_url', async function () {
+  describe('putURL', () => {
+    it('should return the repo_put_url', async () => {
       const url = await putURL('myapp', herokuAPI)
       expect(url).to.equal('https://repo-put-url.com')
     })
   })
 
-  describe('getCacheURL', function () {
-    it('should return the cache_get_url', async function () {
+  describe('getCacheURL', () => {
+    it('should return the cache_get_url', async () => {
       const url = await getCacheURL('myapp', herokuAPI)
       expect(url).to.equal('https://cache-get-url.com')
     })
   })
 
-  describe('putCacheURL', function () {
-    it('should return the cache_put_url', async function () {
+  describe('putCacheURL', () => {
+    it('should return the cache_put_url', async () => {
       const url = await putCacheURL('myapp', herokuAPI)
       expect(url).to.equal('https://cache-put-url.com')
     })

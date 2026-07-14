@@ -1,18 +1,23 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable getter-return */
+/* eslint-disable n/no-deprecated-api */
+/* eslint-disable no-promise-executor-return */
+import type {Dyno as APIDyno} from '@heroku-cli/schema'
+
+import {APIClient, type IOptions} from '@heroku-cli/command'
+import {type Notification, notify} from '@heroku-cli/notifications'
+import * as color from '@heroku/heroku-cli-util/color'
 import {HTTP} from '@heroku/http-call'
-import color from '@heroku-cli/color'
-import {APIClient} from '@heroku-cli/command'
-import {IOptions} from '@heroku-cli/command/lib/api-client'
-import {Notification, notify} from '@heroku-cli/notifications'
-import {Dyno as APIDyno} from '@heroku-cli/schema'
-import {ux} from '@oclif/core'
-import {spawn} from 'child_process'
+import {ux} from '@oclif/core/ux'
 import debugFactory from 'debug'
-import * as https from 'https'
-import * as net from 'net'
-import {Duplex, Transform} from 'stream'
-import * as tls from 'tls'
-import * as tty from 'tty'
-import {URL, parse} from 'url'
+import {spawn} from 'node:child_process'
+import * as https from 'node:https'
+import * as net from 'node:net'
+import {Duplex, Transform} from 'node:stream'
+import * as tls from 'node:tls'
+import * as tty from 'node:tty'
+import {parse, URL} from 'node:url'
 
 const debug = debugFactory('heroku:run')
 const wait = (ms: number) => new Promise<void>(resolve => setTimeout(() => resolve(), ms))
@@ -30,9 +35,9 @@ function buildEnvFromFlag(flag: string) {
 }
 
 interface HerokuApiClientRun extends APIClient {
-  options: {
+  options: IOptions & {
     rejectUnauthorized?: boolean;
-  } & IOptions;
+  };
 }
 
 interface DynoOpts {
@@ -53,27 +58,16 @@ interface DynoOpts {
 
 export default class Dyno extends Duplex {
   dyno?: APIDyno
-
   heroku: HerokuApiClientRun
-
   input: any
-
   legacyUri?: {[key: string]: any}
-
   p: any
-
   reject?: (reason?: any) => void
-
   resolve?: (value?: unknown) => void
-
   unpipeStdin: any
-
   uri?: URL
-
   useSSH: any
-
   private _notified?: boolean
-
   private _startedAt?: number
 
   constructor(public opts: DynoOpts) {
@@ -87,31 +81,12 @@ export default class Dyno extends Duplex {
     }
   }
 
-  // Attaches stdin/stdout to dyno
-  attach() {
-    this.pipe(process.stdout)
-    if (this.dyno && this.dyno.attach_url) {
-      this.uri = new URL(this.dyno.attach_url)
-      this.legacyUri = parse(this.dyno.attach_url)
+  get _useSSH() {
+    if (this.uri) {
+      /* tslint:disable:no-http-string */
+      return this.uri.protocol === 'http:' || this.uri.protocol === 'https:'
+      /* tslint:enable:no-http-string */
     }
-
-    this.p = this._useSSH ? this._ssh() : this._rendezvous()
-
-    return this.p.then(() => {
-      this.end()
-    })
-  }
-
-  /**
-   * Starts the dyno
-   */
-  async start() {
-    this._startedAt = Date.now()
-    if (this.opts.showStatus) {
-      ux.action.start(`Running ${color.cmd(this.opts.command)} on ${color.app(this.opts.app)}`)
-    }
-
-    await this._doStart()
   }
 
   _connect() {
@@ -120,7 +95,7 @@ export default class Dyno extends Duplex {
       this.reject = reject
 
       // @ts-expect-error
-      const options: { rejectUnauthorized?: boolean } & https.RequestOptions = this.legacyUri
+      const options: https.RequestOptions & {rejectUnauthorized?: boolean} = this.legacyUri
       options.headers = {Connection: 'Upgrade', Upgrade: 'tcp'}
       options.rejectUnauthorized = false
       const r = https.request(options)
@@ -222,7 +197,7 @@ export default class Dyno extends Duplex {
     // does not actually uncork but allows error to be displayed when attempting to read
     this.uncork()
     if (this.opts.listen) {
-      ux.log(`listening on port ${host}:${port} for ssh client`)
+      ux.stdout(`listening on port ${host}:${port} for ssh client`)
     } else {
       const params = [host, '-p', port.toString(), '-oStrictHostKeyChecking=no', '-oUserKnownHostsFile=/dev/null', '-oServerAliveInterval=20']
 
@@ -281,7 +256,7 @@ export default class Dyno extends Duplex {
 
           msgs.push('Check that your ssh key has been uploaded to heroku with `heroku keys:add`.')
           // eslint-disable-next-line unicorn/no-array-push-push
-          msgs.push(`See ${color.url('https://devcenter.heroku.com/articles/one-off-dynos#shield-private-spaces')}`)
+          msgs.push(`See ${color.info('https://devcenter.heroku.com/articles/one-off-dynos#shield-private-spaces')}`)
           ux.error(msgs.join('\n'))
         }
 
@@ -289,8 +264,8 @@ export default class Dyno extends Duplex {
         localServer.close()
       })
       this.p
-        .then(() => sshProc.kill())
-        .catch(() => sshProc.kill())
+      .then(() => sshProc.kill())
+      .catch(() => sshProc.kill())
     }
 
     this._notify()
@@ -310,7 +285,7 @@ export default class Dyno extends Duplex {
       // @ts-expect-error
       if (Date.now() - this._startedAt < 1000 * 20) return
 
-      const notification: { subtitle?: string } & Notification = {
+      const notification: Notification & {subtitle?: string} = {
         message: 'dyno is up',
         subtitle: `heroku run ${this.opts.command}`,
         title: this.opts.app,
@@ -359,7 +334,7 @@ export default class Dyno extends Duplex {
           // @ts-expect-error
           this.resolve()
         } else {
-          const err: { exitCode?: number } & Error = new Error(`Process exited with code ${color.error(code.toString())}`)
+          const err: Error & {exitCode?: number} = new Error(`Process exited with code ${color.failure(code.toString())}`)
           err.exitCode = code
           // @ts-expect-error
           this.reject(err)
@@ -489,14 +464,6 @@ export default class Dyno extends Duplex {
     return `${status}, ${this.dyno.name || this.opts.dyno}${size}`
   }
 
-  get _useSSH() {
-    if (this.uri) {
-      /* tslint:disable:no-http-string */
-      return this.uri.protocol === 'http:' || this.uri.protocol === 'https:'
-      /* tslint:enable:no-http-string */
-    }
-  }
-
   _write(chunk: any, encoding: any, callback: any) {
     if (this.useSSH) {
       throw new Error('Cannot write stream to ssh dyno')
@@ -504,5 +471,32 @@ export default class Dyno extends Duplex {
 
     if (!this.input) throw new Error('no input')
     this.input.write(chunk, encoding, callback)
+  }
+
+  // Attaches stdin/stdout to dyno
+  attach() {
+    this.pipe(process.stdout)
+    if (this.dyno && this.dyno.attach_url) {
+      this.uri = new URL(this.dyno.attach_url)
+      this.legacyUri = parse(this.dyno.attach_url)
+    }
+
+    this.p = this._useSSH ? this._ssh() : this._rendezvous()
+
+    return this.p.then(() => {
+      this.end()
+    })
+  }
+
+  /**
+   * Starts the dyno
+   */
+  async start() {
+    this._startedAt = Date.now()
+    if (this.opts.showStatus) {
+      ux.action.start(`Running ${color.code(this.opts.command)} on ${color.app(this.opts.app)}`)
+    }
+
+    await this._doStart()
   }
 }

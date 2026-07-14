@@ -1,53 +1,67 @@
-import {expect} from 'chai'
-import * as sinon from 'sinon'
-import {stdout} from 'stdout-stderr'
+import {runCommand} from '@heroku-cli/test-utils'
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest'
 
-import Cmd from '../../../src/commands/repo/download'
-import * as download from '../../../src/lib/download'
-import * as repo from '../../../src/lib/repo'
-import {runCommand} from '../../run-command'
+const getURLMock = vi.fn()
+const downloadMock = vi.fn()
 
-describe('repo:download', function () {
-  let getURLStub: sinon.SinonStub
-  let downloadStub: sinon.SinonStub
+vi.mock('../../../src/lib/repo.js', async importOriginal => {
+  const actual = await importOriginal<typeof import('../../../src/lib/repo.js')>()
+  return {
+    ...actual,
+    getURL: (...args: unknown[]) => getURLMock(...args),
+  }
+})
 
-  beforeEach(function () {
-    getURLStub = sinon.stub(repo, 'getURL')
-    downloadStub = sinon.stub(download, 'download')
+vi.mock('../../../src/lib/download.js', () => ({
+  download: (...args: unknown[]) => downloadMock(...args),
+}))
+
+const Cmd = (await import('../../../src/commands/repo/download.js')).default
+
+describe('repo:download', () => {
+  beforeEach(() => {
+    getURLMock.mockReset()
+    downloadMock.mockReset()
+    downloadMock.mockResolvedValue({})
   })
 
-  afterEach(function () {
-    sinon.restore()
+  afterEach(() => {
+    vi.clearAllMocks()
   })
 
-  it('should download repo with default filename', async function () {
+  it('should download repo with default filename', async () => {
     const testUrl = 'https://myapp.com/repo.gz'
-    getURLStub.withArgs('myapp').returns(Promise.resolve(testUrl))
-    downloadStub.withArgs(testUrl, 'myapp.gz', {progress: true}).returns(Promise.resolve())
+    getURLMock.mockResolvedValue(testUrl)
 
-    await runCommand(Cmd, [
+    const {stdout} = await runCommand(Cmd, [
       '--app',
       'myapp',
     ])
 
-    expect(getURLStub.calledWith('myapp')).to.be.true
-    expect(downloadStub.called).to.be.true
-    expect(stdout.output).to.contain('Downloading repository to myapp.tar.gz')
+    expect(getURLMock).toHaveBeenCalledWith('myapp', expect.anything())
+    expect(downloadMock).toHaveBeenCalledWith(testUrl, 'myapp.tar.gz', {progress: true})
+    expect(stdout).to.contain('Downloading repository to myapp.tar.gz')
   })
 
-  it('should download repo with custom filename', async function () {
+  it('should download repo with custom filename', async () => {
     const testUrl = 'https://myapp.com/repo.gz'
-    getURLStub.withArgs('myapp').returns(Promise.resolve(testUrl))
-    downloadStub.withArgs(testUrl, 'myapp.tar.gz', {progress: true}).returns(Promise.resolve())
+    getURLMock.mockResolvedValue(testUrl)
 
-    await runCommand(Cmd, [
+    const {stdout} = await runCommand(Cmd, [
       'myapp2.tar.gz',
       '--app',
       'myapp',
     ])
 
-    expect(getURLStub.calledWith('myapp')).to.be.true
-    expect(downloadStub.called).to.be.true
-    expect(stdout.output).to.contain('Downloading repository to myapp2.tar.gz')
+    expect(getURLMock).toHaveBeenCalledWith('myapp', expect.anything())
+    expect(downloadMock).toHaveBeenCalledWith(testUrl, 'myapp2.tar.gz', {progress: true})
+    expect(stdout).to.contain('Downloading repository to myapp2.tar.gz')
   })
 })
