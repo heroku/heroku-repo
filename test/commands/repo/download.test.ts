@@ -29,7 +29,7 @@ describe('repo:download', () => {
   beforeEach(() => {
     getURLMock.mockReset()
     downloadMock.mockReset()
-    downloadMock.mockResolvedValue()
+    downloadMock.mockResolvedValue({})
   })
 
   afterEach(() => {

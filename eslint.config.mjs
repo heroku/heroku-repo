@@ -8,6 +8,7 @@ export default [
       './lib',
       '**/*.js',
       'workflows-repo/**/*',
+      'coverage/**/*',
     ],
   },
   {

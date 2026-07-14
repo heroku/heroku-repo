@@ -34,17 +34,20 @@ clone the application repo to your local filesystem
 
 ```
 USAGE
-  $ heroku repo:clone -a <value> [-r <value>]
+  $ heroku repo:clone -a <value> [--prompt] [-r <value>]
 
 FLAGS
   -a, --app=<value>     (required) app to run command against
   -r, --remote=<value>  the git remote to use
 
+GLOBAL FLAGS
+  --prompt  interactively prompt for command arguments and flags
+
 DESCRIPTION
   clone the application repo to your local filesystem
 ```
 
-_See code: [src/commands/repo/clone.ts](https://github.com/heroku/heroku-repo/blob/v2.0.1/src/commands/repo/clone.ts)_
+_See code: [src/commands/repo/clone.ts](https://github.com/heroku/heroku-repo/blob/v2.0.2/src/commands/repo/clone.ts)_
 
 ## `heroku repo:download [FILENAME]`
 
@@ -52,7 +55,7 @@ download the application repo as a tarball
 
 ```
 USAGE
-  $ heroku repo:download [FILENAME] -a <value> [-r <value>]
+  $ heroku repo:download [FILENAME] -a <value> [--prompt] [-r <value>]
 
 ARGUMENTS
   [FILENAME]  a filename for the tarball
@@ -61,11 +64,14 @@ FLAGS
   -a, --app=<value>     (required) app to run command against
   -r, --remote=<value>  the git remote to use
 
+GLOBAL FLAGS
+  --prompt  interactively prompt for command arguments and flags
+
 DESCRIPTION
   download the application repo as a tarball
 ```
 
-_See code: [src/commands/repo/download.ts](https://github.com/heroku/heroku-repo/blob/v2.0.1/src/commands/repo/download.ts)_
+_See code: [src/commands/repo/download.ts](https://github.com/heroku/heroku-repo/blob/v2.0.2/src/commands/repo/download.ts)_
 
 ## `heroku repo:gc`
 
@@ -73,17 +79,20 @@ run a git gc --aggressive on an application's repository
 
 ```
 USAGE
-  $ heroku repo:gc -a <value> [-r <value>]
+  $ heroku repo:gc -a <value> [--prompt] [-r <value>]
 
 FLAGS
   -a, --app=<value>     (required) app to run command against
   -r, --remote=<value>  the git remote to use
 
+GLOBAL FLAGS
+  --prompt  interactively prompt for command arguments and flags
+
 DESCRIPTION
   run a git gc --aggressive on an application's repository
 ```
 
-_See code: [src/commands/repo/gc.ts](https://github.com/heroku/heroku-repo/blob/v2.0.1/src/commands/repo/gc.ts)_
+_See code: [src/commands/repo/gc.ts](https://github.com/heroku/heroku-repo/blob/v2.0.2/src/commands/repo/gc.ts)_
 
 ## `heroku repo:purge_cache`
 
@@ -91,11 +100,14 @@ delete the contents of the build cache in the repository
 
 ```
 USAGE
-  $ heroku repo:purge_cache -a <value> [-r <value>]
+  $ heroku repo:purge_cache -a <value> [--prompt] [-r <value>]
 
 FLAGS
   -a, --app=<value>     (required) app to run command against
   -r, --remote=<value>  the git remote to use
+
+GLOBAL FLAGS
+  --prompt  interactively prompt for command arguments and flags
 
 DESCRIPTION
   delete the contents of the build cache in the repository
@@ -110,11 +122,14 @@ delete the contents of the build cache in the repository
 
 ```
 USAGE
-  $ heroku repo:purge-cache -a <value> [-r <value>]
+  $ heroku repo:purge-cache -a <value> [--prompt] [-r <value>]
 
 FLAGS
   -a, --app=<value>     (required) app to run command against
   -r, --remote=<value>  the git remote to use
+
+GLOBAL FLAGS
+  --prompt  interactively prompt for command arguments and flags
 
 DESCRIPTION
   delete the contents of the build cache in the repository
@@ -123,7 +138,7 @@ ALIASES
   $ heroku repo:purge_cache
 ```
 
-_See code: [src/commands/repo/purge-cache.ts](https://github.com/heroku/heroku-repo/blob/v2.0.1/src/commands/repo/purge-cache.ts)_
+_See code: [src/commands/repo/purge-cache.ts](https://github.com/heroku/heroku-repo/blob/v2.0.2/src/commands/repo/purge-cache.ts)_
 
 ## `heroku repo:reset`
 
@@ -131,15 +146,18 @@ reset the repo
 
 ```
 USAGE
-  $ heroku repo:reset -a <value> [-r <value>]
+  $ heroku repo:reset -a <value> [--prompt] [-r <value>]
 
 FLAGS
   -a, --app=<value>     (required) app to run command against
   -r, --remote=<value>  the git remote to use
 
+GLOBAL FLAGS
+  --prompt  interactively prompt for command arguments and flags
+
 DESCRIPTION
   reset the repo
 ```
 
-_See code: [src/commands/repo/reset.ts](https://github.com/heroku/heroku-repo/blob/v2.0.1/src/commands/repo/reset.ts)_
+_See code: [src/commands/repo/reset.ts](https://github.com/heroku/heroku-repo/blob/v2.0.2/src/commands/repo/reset.ts)_
 <!-- commandsstop -->

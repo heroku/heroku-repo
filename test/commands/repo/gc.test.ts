@@ -80,8 +80,8 @@ describe('repo:gc', () => {
     mkdirSyncMock.mockReset()
     existsSyncMock.mockReset()
     rmSyncMock.mockReset()
-    tarExtractMock.mockReset().mockResolvedValue()
-    tarCreateMock.mockReset().mockResolvedValue()
+    tarExtractMock.mockReset().mockResolvedValue({})
+    tarCreateMock.mockReset().mockResolvedValue({})
 
     ux.action.start = (message: string) => {
       process.stderr.write(`${stripAnsi(message)}... `)
@@ -103,9 +103,9 @@ describe('repo:gc', () => {
       getURLMock.mockResolvedValue(testGetURL)
       putURLMock.mockResolvedValue(testPutURL)
       mkdtempSyncMock.mockReturnValue(testTmpDir)
-      downloadMock.mockResolvedValue()
+      downloadMock.mockResolvedValue({})
       execSyncHelperMock.mockReturnValue(Buffer.from('git version 2.39.0'))
-      uploadMock.mockResolvedValue()
+      uploadMock.mockResolvedValue({})
       existsSyncMock.mockReturnValue(true)
 
       await runCommand(Cmd, ['--app', 'myapp'])
@@ -175,7 +175,7 @@ describe('repo:gc', () => {
       getURLMock.mockResolvedValue(testGetURL)
       putURLMock.mockResolvedValue(testPutURL)
       mkdtempSyncMock.mockReturnValue(testTmpDir)
-      downloadMock.mockResolvedValue()
+      downloadMock.mockResolvedValue({})
       execSyncHelperMock
       .mockReturnValueOnce(Buffer.from('git version 2.39.0'))
       .mockImplementationOnce(() => {
@@ -194,7 +194,7 @@ describe('repo:gc', () => {
       getURLMock.mockResolvedValue(testGetURL)
       putURLMock.mockResolvedValue(testPutURL)
       mkdtempSyncMock.mockReturnValue(testTmpDir)
-      downloadMock.mockResolvedValue()
+      downloadMock.mockResolvedValue({})
       execSyncHelperMock.mockReturnValue(Buffer.from('git version 2.39.0'))
       uploadMock.mockRejectedValue(new Error('Upload failed'))
       existsSyncMock.mockReturnValue(true)

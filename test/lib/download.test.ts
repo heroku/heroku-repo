@@ -16,7 +16,7 @@ vi.mock('node:https', async importOriginal => {
   const actual = await importOriginal<typeof import('node:https')>()
   return {
     ...actual,
-    default: {...actual.default, get: httpsGetMock},
+    default: {...actual, get: httpsGetMock},
     get: httpsGetMock,
   }
 })

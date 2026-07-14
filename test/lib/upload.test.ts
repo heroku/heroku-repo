@@ -1,3 +1,4 @@
+import type {OutgoingHttpHeaders} from 'node:http'
 import type * as https from 'node:https'
 
 import {
@@ -19,7 +20,7 @@ vi.mock('node:https', async importOriginal => {
   const actual = await importOriginal<typeof import('node:https')>()
   return {
     ...actual,
-    default: {...actual.default, request: httpsRequestMock},
+    default: {...actual, request: httpsRequestMock},
     request: httpsRequestMock,
   }
 })
@@ -95,7 +96,8 @@ describe('Upload Module', () => {
       expect(callArgs.method).to.equal('PUT')
       expect(callArgs.hostname).to.equal('example.com')
       expect(callArgs.path).to.equal('/upload?token=abc123')
-      expect(callArgs.headers?.['Content-Length']).to.equal(testFileSize)
+      const headers = callArgs.headers as OutgoingHttpHeaders
+      expect(headers['Content-Length']).to.equal(testFileSize)
     })
   })
 
