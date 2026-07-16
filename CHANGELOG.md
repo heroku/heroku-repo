@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/heroku/heroku-repo/compare/plugin-heroku-repo-v2.0.2...plugin-heroku-repo-v3.0.0) (2026-07-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* package is now ESM-only and requires oclif v4.
+
+### Code Refactoring
+
+* migrate to oclif v4, ESM, and vitest ([#179](https://github.com/heroku/heroku-repo/issues/179)) ([252ea81](https://github.com/heroku/heroku-repo/commit/252ea815a5cef63373f5f99800d21d5d67002f41))
+
 ## [2.0.2](https://github.com/heroku/heroku-repo/compare/plugin-heroku-repo-v2.0.1...plugin-heroku-repo-v2.0.2) (2026-06-11)
 
 
