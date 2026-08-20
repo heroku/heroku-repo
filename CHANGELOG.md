@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.1](https://github.com/heroku/heroku-repo/compare/plugin-heroku-repo-v3.0.0...plugin-heroku-repo-v3.0.1) (2026-08-20)
+
+
+### Dependencies
+
+* bump postcss from 8.5.16 to 8.5.25 ([#190](https://github.com/heroku/heroku-repo/issues/190)) ([d634843](https://github.com/heroku/heroku-repo/commit/d6348431c262316c8edcb9ccc50d91abcaa9ff84))
+* bump tar from 7.5.19 to 7.5.21 ([#189](https://github.com/heroku/heroku-repo/issues/189)) ([92b0076](https://github.com/heroku/heroku-repo/commit/92b00763431355bae453af8d788e0fe1608eba52))
+
 ## [3.0.0](https://github.com/heroku/heroku-repo/compare/plugin-heroku-repo-v2.0.2...plugin-heroku-repo-v3.0.0) (2026-07-14)
 
 
