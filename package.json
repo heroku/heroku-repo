@@ -24,7 +24,7 @@
     "@types/bytes": "^3.1.4",
     "@types/debug": "^4.1.12",
     "@types/node": "^26.1.1",
-    "@types/tar": "^6.1.0",
+    "@types/tar": "^7.0.87",
     "@vitest/coverage-v8": "^3.2.4",
     "eslint": "^9",
     "eslint-config-oclif": "^6.0.144",
