@@ -27,7 +27,7 @@
     "@types/tar": "^6.1.0",
     "@vitest/coverage-v8": "^5.0.0",
     "eslint": "^9",
-    "eslint-config-oclif": "^6.0.144",
+    "eslint-config-oclif": "^7.1.7",
     "nock": "^14.0.0",
     "oclif": "^4.23.14",
     "strip-ansi": "^7",
