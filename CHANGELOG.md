@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.2](https://github.com/heroku/heroku-repo/compare/plugin-heroku-repo-v3.0.1...plugin-heroku-repo-v3.0.2) (2026-09-22)
+
+
+### Dependencies
+
+* bump @heroku-cli/command from 13.0.0 to 13.2.0 ([#201](https://github.com/heroku/heroku-repo/issues/201)) ([35adb40](https://github.com/heroku/heroku-repo/commit/35adb40b074cc25fae0bb6f1f02cc16ccb0c63b6))
+* bump @heroku-cli/notifications from 1.2.7 to 1.2.9 ([#199](https://github.com/heroku/heroku-repo/issues/199)) ([473e05c](https://github.com/heroku/heroku-repo/commit/473e05cc1af889d42249d153226575e2ebd82fe6))
+* bump @heroku/heroku-cli-util from 10.8.0 to 10.10.0 ([#209](https://github.com/heroku/heroku-repo/issues/209)) ([08b1aff](https://github.com/heroku/heroku-repo/commit/08b1aff9867a9d32cfb555e974c3a9fb7caf4808))
+* bump @heroku/http-call from 5.5.3 to 5.6.0 ([#198](https://github.com/heroku/heroku-repo/issues/198)) ([67c9bf8](https://github.com/heroku/heroku-repo/commit/67c9bf80f88dd2153b38da9319cd2c27752550a0))
+* bump @vitest/mocker, @vitest/coverage-v8 and vitest ([#206](https://github.com/heroku/heroku-repo/issues/206)) ([3d3438b](https://github.com/heroku/heroku-repo/commit/3d3438b5e5442763175f96b41ffa2e3da01c711a))
+
 ## [3.0.1](https://github.com/heroku/heroku-repo/compare/plugin-heroku-repo-v3.0.0...plugin-heroku-repo-v3.0.1) (2026-08-20)
 
 
