@@ -30,6 +30,7 @@
     "eslint-config-oclif": "^6.0.144",
     "nock": "^14.0.0",
     "oclif": "^4.23.14",
+    "rimraf": "^6.1.3",
     "strip-ansi": "^7",
     "typescript": "^5.9.3",
     "vitest": "^5.0.0"
@@ -63,13 +64,18 @@
     "url": "https://github.com/heroku/heroku-repo.git"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc -b && oclif manifest && oclif readme",
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc -b",
+    "manifest": "oclif manifest",
+    "readme": "oclif readme",
     "lint": "eslint .",
-    "postpack": "rm -f oclif.manifest.json",
-    "posttest": "npm run lint",
-    "prepack": "npm run build",
-    "test": "vitest run --coverage",
-    "version": "oclif readme && git add README.md"
+    "lint:fix": "eslint . --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage --coverage.reporter=text-summary --coverage.reporter=lcovonly",
+    "docs:generate": "npm run build && npm run manifest && oclif readme --output-dir docs --multi",
+    "prepare": "npm run build && npm run manifest",
+    "postpack": "rimraf oclif.manifest.json"
   },
   "overrides": {
     "uuid": "^11.1.1"
