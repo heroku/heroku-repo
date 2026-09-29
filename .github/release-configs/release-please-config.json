@@ -1,7 +1,6 @@
 {
   "packages": {
     ".": {
-      "versioning": "prerelease",
       "release-type": "node",
       "version-file": "package.json",
       "changelog-path": "CHANGELOG.md",

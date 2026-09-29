@@ -9,6 +9,7 @@
       "bump-patch-for-minor-pre-major": true,
       "prerelease": true,
       "prerelease-type": "beta",
+      "versioning": "prerelease",
       "changelog-sections": [
         { "type": "feat", "section": "Features" },
         { "type": "fix", "section": "Bug Fixes" },
