@@ -120,7 +120,7 @@ jobs:
         with:
           package-manager: npm  # npm | yarn | pnpm
           workflows_token: ${{ steps.app-token.outputs.token }}
-          build_command: 'run build'
+          build_command: ''
           dry_run: ${{ inputs.dry_run }}
           npm_tag: ${{ needs.release-please-pr.outputs.npm_tag }}
           package_name: ${{ needs.release-please-pr.outputs.package_name }}
