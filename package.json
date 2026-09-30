@@ -51,6 +51,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "oclif": {
+    "repositoryPrefix": "<%- repo %>/blob/plugin-heroku-repo-v<%- version %>/<%- commandPath %>",
     "commands": "./dist/commands",
     "bin": "heroku",
     "topics": {
