@@ -37,7 +37,7 @@ USAGE
   $ heroku repo:clone -a <value> [--prompt] [-r <value>]
 
 FLAGS
-  -a, --app=<value>     (required) app to run command against
+  -a, --app=<value>     (required) [env: HEROKU_APP] app to run command against
   -r, --remote=<value>  the git remote to use
 
 GLOBAL FLAGS
@@ -47,7 +47,7 @@ DESCRIPTION
   clone the application repo to your local filesystem
 ```
 
-_See code: [src/commands/repo/clone.ts](https://github.com/heroku/heroku-repo/blob/v2.0.2/src/commands/repo/clone.ts)_
+_See code: [src/commands/repo/clone.ts](https://github.com/heroku/heroku-repo/blob/plugin-heroku-repo-v3.0.2/src/commands/repo/clone.ts)_
 
 ## `heroku repo:download [FILENAME]`
 
@@ -61,7 +61,7 @@ ARGUMENTS
   [FILENAME]  a filename for the tarball
 
 FLAGS
-  -a, --app=<value>     (required) app to run command against
+  -a, --app=<value>     (required) [env: HEROKU_APP] app to run command against
   -r, --remote=<value>  the git remote to use
 
 GLOBAL FLAGS
@@ -71,7 +71,7 @@ DESCRIPTION
   download the application repo as a tarball
 ```
 
-_See code: [src/commands/repo/download.ts](https://github.com/heroku/heroku-repo/blob/v2.0.2/src/commands/repo/download.ts)_
+_See code: [src/commands/repo/download.ts](https://github.com/heroku/heroku-repo/blob/plugin-heroku-repo-v3.0.2/src/commands/repo/download.ts)_
 
 ## `heroku repo:gc`
 
@@ -82,7 +82,7 @@ USAGE
   $ heroku repo:gc -a <value> [--prompt] [-r <value>]
 
 FLAGS
-  -a, --app=<value>     (required) app to run command against
+  -a, --app=<value>     (required) [env: HEROKU_APP] app to run command against
   -r, --remote=<value>  the git remote to use
 
 GLOBAL FLAGS
@@ -92,7 +92,7 @@ DESCRIPTION
   run a git gc --aggressive on an application's repository
 ```
 
-_See code: [src/commands/repo/gc.ts](https://github.com/heroku/heroku-repo/blob/v2.0.2/src/commands/repo/gc.ts)_
+_See code: [src/commands/repo/gc.ts](https://github.com/heroku/heroku-repo/blob/plugin-heroku-repo-v3.0.2/src/commands/repo/gc.ts)_
 
 ## `heroku repo:purge_cache`
 
@@ -103,7 +103,7 @@ USAGE
   $ heroku repo:purge_cache -a <value> [--prompt] [-r <value>]
 
 FLAGS
-  -a, --app=<value>     (required) app to run command against
+  -a, --app=<value>     (required) [env: HEROKU_APP] app to run command against
   -r, --remote=<value>  the git remote to use
 
 GLOBAL FLAGS
@@ -125,7 +125,7 @@ USAGE
   $ heroku repo:purge-cache -a <value> [--prompt] [-r <value>]
 
 FLAGS
-  -a, --app=<value>     (required) app to run command against
+  -a, --app=<value>     (required) [env: HEROKU_APP] app to run command against
   -r, --remote=<value>  the git remote to use
 
 GLOBAL FLAGS
@@ -138,7 +138,7 @@ ALIASES
   $ heroku repo:purge_cache
 ```
 
-_See code: [src/commands/repo/purge-cache.ts](https://github.com/heroku/heroku-repo/blob/v2.0.2/src/commands/repo/purge-cache.ts)_
+_See code: [src/commands/repo/purge-cache.ts](https://github.com/heroku/heroku-repo/blob/plugin-heroku-repo-v3.0.2/src/commands/repo/purge-cache.ts)_
 
 ## `heroku repo:reset`
 
@@ -149,7 +149,7 @@ USAGE
   $ heroku repo:reset -a <value> [--prompt] [-r <value>]
 
 FLAGS
-  -a, --app=<value>     (required) app to run command against
+  -a, --app=<value>     (required) [env: HEROKU_APP] app to run command against
   -r, --remote=<value>  the git remote to use
 
 GLOBAL FLAGS
@@ -159,5 +159,5 @@ DESCRIPTION
   reset the repo
 ```
 
-_See code: [src/commands/repo/reset.ts](https://github.com/heroku/heroku-repo/blob/v2.0.2/src/commands/repo/reset.ts)_
+_See code: [src/commands/repo/reset.ts](https://github.com/heroku/heroku-repo/blob/plugin-heroku-repo-v3.0.2/src/commands/repo/reset.ts)_
 <!-- commandsstop -->
