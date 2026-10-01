@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.0.3](https://github.com/heroku/heroku-repo/compare/plugin-heroku-repo-v3.0.2...plugin-heroku-repo-v3.0.3) (2026-10-01)
+
+
+### Bug Fixes
+
+* correct broken source links in generated command docs ([#217](https://github.com/heroku/heroku-repo/issues/217)) ([140aa1c](https://github.com/heroku/heroku-repo/commit/140aa1ca3fffec2a11cf1c7735dd21db2f7ab92e))
+
+
+### Dependencies
+
+* bump @heroku/heroku-cli-util from 10.10.0 to 10.10.1 ([#214](https://github.com/heroku/heroku-repo/issues/214)) ([d2a3957](https://github.com/heroku/heroku-repo/commit/d2a3957d8ba508f135a7c014d4923eaa70974cae))
+* bump brace-expansion ([#218](https://github.com/heroku/heroku-repo/issues/218)) ([f617548](https://github.com/heroku/heroku-repo/commit/f617548433a04c2f48b616de0074aee79e1050e4))
+* bump tar and @types/tar ([#187](https://github.com/heroku/heroku-repo/issues/187)) ([eecc394](https://github.com/heroku/heroku-repo/commit/eecc394b53af27246b84dba9dd2b2966c83ed76c))
+
 ## [3.0.2](https://github.com/heroku/heroku-repo/compare/plugin-heroku-repo-v3.0.1...plugin-heroku-repo-v3.0.2) (2026-09-22)
 
 
