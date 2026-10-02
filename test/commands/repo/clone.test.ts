@@ -79,6 +79,10 @@ describe('repo:clone', () => {
     .reply(200, app)
 
     existsSyncMock.mockReturnValue(false)
+    execSyncHelperMock.mockImplementation((cmd: string) => {
+      if (cmd === 'git symbolic-ref --short HEAD') return Buffer.from('main')
+      return undefined
+    })
 
     await runCommand(Cmd, [
       '--app',
@@ -88,7 +92,8 @@ describe('repo:clone', () => {
     expect(existsSyncMock).toHaveBeenCalled()
     expect(mkdirSyncMock).toHaveBeenCalledWith('myapp/.git', {recursive: true})
     expect(chdirSpy).toHaveBeenCalledWith('myapp/.git')
-    expect(execSyncHelperMock).toHaveBeenCalledTimes(4)
+    expect(execSyncHelperMock).toHaveBeenCalledTimes(5)
+    expect(execSyncHelperMock).toHaveBeenCalledWith('git symbolic-ref --short HEAD', {})
   })
 
   it('should abort if app directory already exists', async () => {
