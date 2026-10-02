@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.4](https://github.com/heroku/heroku-repo/compare/plugin-heroku-repo-v3.0.3...plugin-heroku-repo-v3.0.4) (2026-10-02)
+
+
+### Bug Fixes
+
+* detect HEAD branch instead of hardcoding main/master in repo:clone ([#220](https://github.com/heroku/heroku-repo/issues/220)) ([89a0fc3](https://github.com/heroku/heroku-repo/commit/89a0fc3b80e9a1d64e2468167f922618b152b64d))
+
 ## [3.0.3](https://github.com/heroku/heroku-repo/compare/plugin-heroku-repo-v3.0.2...plugin-heroku-repo-v3.0.3) (2026-10-01)
 
 
