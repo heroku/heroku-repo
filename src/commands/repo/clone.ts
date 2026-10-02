@@ -35,17 +35,11 @@ export default class Clone extends Command {
       {stdio: 'inherit'},
     )
 
-    try {
-      execSyncHelper(
-        'git reset --hard main',
-        {stdio: 'inherit'},
-      )
-    } catch {
-      execSyncHelper(
-        'git reset --hard master',
-        {stdio: 'inherit'},
-      )
-    }
+    const headBranch = execSyncHelper('git symbolic-ref --short HEAD', {}).toString().trim()
+    execSyncHelper(
+      `git reset --hard ${headBranch}`,
+      {stdio: 'inherit'},
+    )
 
     execSyncHelper(
       `git remote add heroku ${info.git_url}`,
