@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.6](https://github.com/heroku/heroku-repo/compare/plugin-heroku-repo-v3.0.5...plugin-heroku-repo-v3.0.6) (2026-11-09)
+
+
+### Dependencies
+
+* bump @heroku-cli/command from 13.2.3 to 13.2.5 ([#233](https://github.com/heroku/heroku-repo/issues/233)) ([a954e58](https://github.com/heroku/heroku-repo/commit/a954e58c2b75e07c826acc35d4c7f0f4829530e2))
+* bump @heroku/http-call from 5.6.2 to 5.6.3 ([#234](https://github.com/heroku/heroku-repo/issues/234)) ([a232508](https://github.com/heroku/heroku-repo/commit/a23250836a2eb3bda2cc837e2ec0773b0f23911b))
+
 ## [3.0.5](https://github.com/heroku/heroku-repo/compare/plugin-heroku-repo-v3.0.4...plugin-heroku-repo-v3.0.5) (2026-10-29)
 
 
