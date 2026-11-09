@@ -29,22 +29,16 @@ mkdir -p tmp/repo_tmp/unpack
 cd tmp/repo_tmp
 curl -fo repo-cache.tgz 'https://get-cache-url.com'
 cd unpack
-tar -zxf ../repo-cache.tgz
-METADATA="vendor/heroku"
-if [ -d "$METADATA" ]; then
-  TMPDIR=\`mktemp -d\`
-  cp -rf $METADATA $TMPDIR
+METADATA=
+if tar -tzf ../repo-cache.tgz ./vendor/heroku >/dev/null 2>&1; then
+  METADATA=./vendor/heroku
+elif tar -tzf ../repo-cache.tgz vendor/heroku >/dev/null 2>&1; then
+  METADATA=vendor/heroku
+else
+  tar -tzf ../repo-cache.tgz >/dev/null
 fi
-cd ..
-rm -rf unpack
-mkdir unpack
-cd unpack
-TMPDATA="$TMPDIR/heroku"
-VENDOR="vendor"
-if [ -d "$TMPDATA" ]; then
-  mkdir $VENDOR
-  cp -rf $TMPDATA $VENDOR
-  rm -rf $TMPDIR
+if [ -n "$METADATA" ]; then
+  tar -zxf ../repo-cache.tgz "$METADATA"
 fi
 tar -zcf ../cache-repack.tgz .
 curl -fo /dev/null --upload-file ../cache-repack.tgz 'https://put-cache-url.com'
@@ -77,5 +71,10 @@ describe('repo:purge-cache', () => {
     expect(dynoOpts.app).to.equal('myapp')
     expect(dynoOpts.attach).to.equal(true)
     expect(dynoOpts.command).to.equal(commandString)
+    expect(dynoOpts.command).toContain('tar -zxf ../repo-cache.tgz "$METADATA"')
+    expect(dynoOpts.command).not.toContain('tar -zxf ../repo-cache.tgz\n')
+    expect(dynoOpts.command).not.toContain('mktemp')
+    expect(dynoOpts.command).not.toContain('cp -rf')
+    expect(dynoOpts.command).not.toContain('rm -rf unpack')
   })
 })
