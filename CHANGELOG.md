@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.7](https://github.com/heroku/heroku-repo/compare/plugin-heroku-repo-v3.0.6...plugin-heroku-repo-v3.0.7) (2026-11-20)
+
+
+### Dependencies
+
+* bump @heroku-cli/command from 13.2.5 to 13.2.6 ([#238](https://github.com/heroku/heroku-repo/issues/238)) ([d7119f6](https://github.com/heroku/heroku-repo/commit/d7119f6c08874f3d6c40e73508cb2ed04aeaba2d))
+
 ## [3.0.6](https://github.com/heroku/heroku-repo/compare/plugin-heroku-repo-v3.0.5...plugin-heroku-repo-v3.0.6) (2026-11-09)
 
 
